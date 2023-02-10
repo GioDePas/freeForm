@@ -19,10 +19,10 @@ public class Worker {
     private Long id;
     @NotNull
     @Size(min = 2, max = 30)
-    private String firstName;
+    private String firstname;
     @NotNull
     @Size(min = 2, max = 30)
-    private String lastName;
+    private String lastname;
     @NotNull
     private String email;
     @NotNull

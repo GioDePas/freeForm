@@ -29,8 +29,8 @@ public class WorkerService {
     public Worker updateWorker(Long id, Worker worker) {
         Worker currentWorker = workerRepository.findById(id).orElse(null);
         if (currentWorker != null) {
-            currentWorker.setFirstName(worker.getFirstName());
-            currentWorker.setLastName(worker.getLastName());
+            currentWorker.setFirstname(worker.getFirstname());
+            currentWorker.setLastname(worker.getLastname());
             currentWorker.setAge(worker.getAge());
         }
         return workerRepository.save(currentWorker);
