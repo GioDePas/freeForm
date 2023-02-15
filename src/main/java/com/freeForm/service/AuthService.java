@@ -15,13 +15,12 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public User createUser(RegisterRequest registerRequest) {
-
+    public User register(RegisterRequest registerRequest) {
         if (registerRequest == null || (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword()))) {
             return null;
         }
-        String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
 
+        String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
         User user = User.builder()
                 .firstname(registerRequest.getFirstname())
                 .lastname(registerRequest.getLastname())
@@ -31,4 +30,9 @@ public class AuthService {
 
         return userRepository.save(user);
     }
+
+    public User login( User user) {
+        return userRepository.save(user);
+    }
+
 }

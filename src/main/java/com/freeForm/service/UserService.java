@@ -1,10 +1,8 @@
 package com.freeForm.service;
 
-import com.freeForm.dto.request.RegisterRequest;
 import com.freeForm.entity.User;
 import com.freeForm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +14,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -37,6 +34,9 @@ public class UserService {
             currentUser.setLastname(user.getLastname());
             currentUser.setEmail(user.getEmail());
             currentUser.setPassword(user.getPassword());
+        }
+        if (currentUser == null){
+            return null;
         }
         return userRepository.save(currentUser);
     }
