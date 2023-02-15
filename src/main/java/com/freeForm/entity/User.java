@@ -1,9 +1,7 @@
 package com.freeForm.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.freeForm.enums.Role;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +25,6 @@ public class User {
     private String lastname;
     private String email;
     private String password;
-
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

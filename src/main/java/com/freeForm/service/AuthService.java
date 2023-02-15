@@ -2,6 +2,7 @@ package com.freeForm.service;
 
 import com.freeForm.dto.request.RegisterRequest;
 import com.freeForm.entity.User;
+import com.freeForm.enums.Role;
 import com.freeForm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,7 @@ public class AuthService {
                 .firstname(registerRequest.getFirstname())
                 .lastname(registerRequest.getLastname())
                 .email(registerRequest.getEmail())
+                .role(Role.USER)
                 .password(encodedPassword)
                 .build();
 

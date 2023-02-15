@@ -1,0 +1,13 @@
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/freeformdb
+    username: root
+    password: giorgio
+    driver-class-name: com.mysql.cj.jdbc.Driver
