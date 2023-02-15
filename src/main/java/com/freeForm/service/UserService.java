@@ -4,7 +4,7 @@ import com.freeForm.dto.request.RegisterRequest;
 import com.freeForm.entity.User;
 import com.freeForm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
@@ -26,23 +26,16 @@ public class UserService {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User createUser(RegisterRequest registerRequest) {
-        if (registerRequest == null || (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword()))) {
-            return null;
-        }
-        String encodedPassword = bCryptPasswordEncoder.encode(registerRequest.getPassword());
-        User user = User.builder().username(registerRequest.getUsername()).password(encodedPassword).build();
-        return userRepository.save(user);
-    }
-
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<User> getUserByUsername(String email) {
+        return userRepository.findByEmail(email);
     }
 
     public User updateUser(Long id, User user) {
         User currentUser = userRepository.findById(id).orElse(null);
         if (currentUser != null) {
-            currentUser.setUsername(user.getUsername());
+            currentUser.setFirstname(user.getFirstname());
+            currentUser.setLastname(user.getLastname());
+            currentUser.setEmail(user.getEmail());
             currentUser.setPassword(user.getPassword());
         }
         return userRepository.save(currentUser);

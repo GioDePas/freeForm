@@ -1,7 +1,7 @@
 package com.freeForm.controller;
 
 import com.freeForm.dto.request.RegisterRequest;
-import com.freeForm.service.UserService;
+import com.freeForm.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,12 +10,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
-
-    private final UserService userService;
+    private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-        return ResponseEntity.ok(userService.createUser(registerRequest));
+        return ResponseEntity.ok(authService.createUser(registerRequest));
     }
-
 }
