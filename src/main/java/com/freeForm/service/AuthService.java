@@ -1,10 +1,16 @@
 package com.freeForm.service;
 
+import com.freeForm.config.JwtService;
 import com.freeForm.dto.request.RegisterRequest;
+import com.freeForm.dto.response.AuthenticationResponse;
 import com.freeForm.entity.User;
 import com.freeForm.enums.Role;
 import com.freeForm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,12 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
-    public User register(RegisterRequest registerRequest) {
+
+    public AuthenticationResponse register(RegisterRequest registerRequest) {
         if (registerRequest == null || (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword()))) {
-            return null;
+            throw new RuntimeException("Password and Confirm Password must be same");
         }
-
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
         User user = User.builder()
                 .firstname(registerRequest.getFirstname())
@@ -29,12 +37,26 @@ public class AuthService {
                 .role(Role.USER)
                 .password(encodedPassword)
                 .build();
-
-        return userRepository.save(user);
+        userRepository.save(user);
+        var jwtToken = jwtService.generateToken((UserDetails) user);
+        return AuthenticationResponse.builder()
+                .authenticationToken(jwtToken)
+                .build();
     }
 
-    public User login( User user) {
-        return userRepository.save(user);
+    public AuthenticationResponse login(User user) {
+        Authentication authentication = authenticationManager
+                .authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                user.getEmail(),
+                                user.getPassword()
+                        )
+                );
+        var username = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        var jwtToken = jwtService.generateToken((UserDetails) username);
+        return AuthenticationResponse.builder()
+                .authenticationToken(jwtToken)
+                .build();
     }
-
 }
