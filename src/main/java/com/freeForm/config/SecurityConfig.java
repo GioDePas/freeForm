@@ -20,7 +20,6 @@ public class SecurityConfig {
 
     private final UserDetailServiceImpl userDetailService;
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
