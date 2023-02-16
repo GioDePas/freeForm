@@ -1,7 +1,7 @@
 package com.freeForm.service;
 
 import com.freeForm.entity.User;
-import com.freeForm.entity.UserPrincipal;
+import com.freeForm.entity.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,6 +21,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("User not found" + email);
         }
-        return new UserPrincipal(user.get());
+        return new CustomUserDetails(user.get());
     }
 }
