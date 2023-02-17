@@ -35,7 +35,7 @@ public class UserService {
             currentUser.setEmail(user.getEmail());
             currentUser.setPassword(user.getPassword());
         }
-        if (currentUser == null){
+        if (currentUser == null) {
             return null;
         }
         return userRepository.save(currentUser);

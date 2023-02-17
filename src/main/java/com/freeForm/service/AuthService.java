@@ -7,7 +7,7 @@ import com.freeForm.dto.response.AuthenticationResponse;
 import com.freeForm.entity.CustomUserDetails;
 import com.freeForm.entity.User;
 import com.freeForm.enums.Role;
-import com.freeForm.errors.UserNameTakenException;
+import com.freeForm.exceptions.UserNameTakenException;
 import com.freeForm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
