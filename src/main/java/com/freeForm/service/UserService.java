@@ -30,10 +30,19 @@ public class UserService {
     public User updateUser(Long id, User user) {
         User currentUser = userRepository.findById(id).orElse(null);
         if (currentUser != null) {
-            currentUser.setFirstname(user.getFirstname());
-            currentUser.setLastname(user.getLastname());
-            currentUser.setEmail(user.getEmail());
-            currentUser.setPassword(user.getPassword());
+            if (user.getFirstname() != null) {
+                currentUser.setFirstname(user.getFirstname());
+            }
+            if (user.getLastname() != null) {
+                currentUser.setLastname(user.getLastname());
+            }
+            if (user.getEmail() != null) {
+                currentUser.setEmail(user.getEmail());
+            }
+            if (user.getPassword() != null) {
+                currentUser.setPassword(user.getPassword());
+            }
+
         }
         if (currentUser == null) {
             return null;
