@@ -22,6 +22,7 @@ public class User {
     @NotNull
     private String lastname;
     @NotNull
+    @Column(unique = true)
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)

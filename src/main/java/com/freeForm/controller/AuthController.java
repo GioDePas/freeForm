@@ -1,12 +1,16 @@
 package com.freeForm.controller;
 
+import com.freeForm.dto.request.AuthenticationRequest;
 import com.freeForm.dto.request.RegisterRequest;
 import com.freeForm.dto.response.AuthenticationResponse;
-import com.freeForm.entity.User;
+import com.freeForm.errors.UserNameTakenException;
 import com.freeForm.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -20,7 +24,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody User user) {
-        return ResponseEntity.ok().body(authService.login(user));
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest authenticationRequest) {
+        return ResponseEntity.ok().body(authService.login(authenticationRequest));
     }
 }
