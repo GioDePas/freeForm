@@ -2,10 +2,15 @@ package com.freeForm.controller;
 
 import com.freeForm.entity.User;
 import com.freeForm.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static io.swagger.v3.oas.annotations.enums.ParameterIn.HEADER;
 
 @RestController
 @RequestMapping("/api/users")
@@ -14,6 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
+    @SecurityRequirement(name = "bearerAuth")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
