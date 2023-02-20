@@ -11,6 +11,6 @@ import org.springframework.context.annotation.Configuration;
         scheme = "bearer",
         bearerFormat = "JWT"
 )
+/*http://localhost:8080/swagger-ui.html*/
 public class OpenApiConfig {
-    // your other configuration code here
 }

@@ -26,7 +26,7 @@ public class Worker {
     @NotNull
     private String email;
     @NotNull
-    private int age;
+    private Integer age;
     @ManyToMany(
             cascade = CascadeType.ALL
     )

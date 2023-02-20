@@ -29,23 +29,20 @@ public class UserService {
 
     public User updateUser(Long id, User user) {
         User currentUser = userRepository.findById(id).orElse(null);
-        if (currentUser != null) {
-            if (user.getFirstname() != null) {
-                currentUser.setFirstname(user.getFirstname());
-            }
-            if (user.getLastname() != null) {
-                currentUser.setLastname(user.getLastname());
-            }
-            if (user.getEmail() != null) {
-                currentUser.setEmail(user.getEmail());
-            }
-            if (user.getPassword() != null) {
-                currentUser.setPassword(user.getPassword());
-            }
-
-        }
         if (currentUser == null) {
-            return null;
+            throw new RuntimeException("User with id " + id + " not found");
+        }
+        if (user.getFirstname() != null) {
+            currentUser.setFirstname(user.getFirstname());
+        }
+        if (user.getLastname() != null) {
+            currentUser.setLastname(user.getLastname());
+        }
+        if (user.getEmail() != null) {
+            currentUser.setEmail(user.getEmail());
+        }
+        if (user.getPassword() != null) {
+            currentUser.setPassword(user.getPassword());
         }
         return userRepository.save(currentUser);
     }

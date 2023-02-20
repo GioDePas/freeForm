@@ -31,10 +31,15 @@ public class WorkerService {
         if (currentWorker == null) {
             throw new RuntimeException("Worker with id " + id + " not found");
         }
-        currentWorker.setFirstname(worker.getFirstname());
-        currentWorker.setLastname(worker.getLastname());
-        currentWorker.setAge(worker.getAge());
-
+        if (worker.getFirstname() != null) {
+            currentWorker.setFirstname(worker.getFirstname());
+        }
+        if (worker.getLastname() != null) {
+            currentWorker.setLastname(worker.getLastname());
+        }
+        if (worker.getAge() != null) {
+            currentWorker.setAge(worker.getAge());
+        }
         return workerRepository.save(currentWorker);
     }
 
