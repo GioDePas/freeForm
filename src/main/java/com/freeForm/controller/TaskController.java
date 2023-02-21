@@ -1,19 +1,24 @@
 package com.freeForm.controller;
 
+import com.freeForm.entity.Attachment;
 import com.freeForm.entity.Task;
+import com.freeForm.service.AttachmentService;
 import com.freeForm.service.TaskService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tasks")
 @RequiredArgsConstructor
+@RequestMapping("/api/tasks")
 public class TaskController {
     private final TaskService taskService;
+    private final AttachmentService attachmentService;
 
     @GetMapping
     @SecurityRequirement(name = "bearerAuth")
@@ -29,7 +34,10 @@ public class TaskController {
 
     @PostMapping
     @SecurityRequirement(name = "bearerAuth")
-    public Task createTask(@Valid @RequestBody Task task) {
+    public Task createTask(@Valid @RequestPart Task task, @RequestPart MultipartFile file) throws Exception {
+        Attachment attachment = new Attachment();
+        attachment.setName(file.getOriginalFilename());
+        attachment.setData(file.getBytes());
         return taskService.createTask(task);
     }
 
@@ -44,4 +52,16 @@ public class TaskController {
     public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
     }
+
+    @PostMapping("/tasks/{taskId}/attachment")
+    public ResponseEntity<Attachment> createAttachmentByTaskId(@PathVariable Long taskId, @RequestBody Attachment attachment) {
+        Task task = taskService.getTaskById(taskId);
+        if (task == null) {
+            return ResponseEntity.notFound().build();
+        }
+        task.setAttachment(attachment);
+        attachmentService.createAttachment(attachment);
+        return ResponseEntity.ok(attachment);
+    }
+
 }

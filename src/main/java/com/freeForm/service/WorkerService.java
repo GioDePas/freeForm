@@ -27,10 +27,9 @@ public class WorkerService {
     }
 
     public Worker updateWorker(Long id, Worker worker) {
-        Worker currentWorker = workerRepository.findById(id).orElse(null);
-        if (currentWorker == null) {
-            throw new RuntimeException("Worker with id " + id + " not found");
-        }
+        Worker currentWorker = workerRepository
+                .findById(id)
+                .orElseThrow(()->new RuntimeException("Worker with id " + id + " not found"));
         if (worker.getFirstname() != null) {
             currentWorker.setFirstname(worker.getFirstname());
         }

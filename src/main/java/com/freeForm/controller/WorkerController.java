@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/workers")
 @AllArgsConstructor
+@RequestMapping("/api/workers")
 public class WorkerController {
     private final WorkerService workerService;
 

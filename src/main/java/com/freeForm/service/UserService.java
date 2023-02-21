@@ -28,10 +28,9 @@ public class UserService {
     }
 
     public User updateUser(Long id, User user) {
-        User currentUser = userRepository.findById(id).orElse(null);
-        if (currentUser == null) {
-            throw new RuntimeException("User with id " + id + " not found");
-        }
+        User currentUser = userRepository
+                .findById(id)
+                .orElseThrow(()->new RuntimeException("User with id " + id + " not found"));
         if (user.getFirstname() != null) {
             currentUser.setFirstname(user.getFirstname());
         }

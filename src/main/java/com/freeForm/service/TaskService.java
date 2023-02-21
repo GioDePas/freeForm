@@ -27,12 +27,15 @@ public class TaskService {
     }
 
     public Task updateTask(Long id, Task task) {
-        Task currentTask = taskRepository.findById(id).orElse(null);
-        if (currentTask == null) {
-            throw new RuntimeException("Task with id " + id + " not found");
+        Task currentTask = taskRepository
+                .findById(id)
+                .orElseThrow(()->new RuntimeException("Task with id " + id + " not found"));
+        if (task.getName() != null) {
+            currentTask.setName(task.getName());
         }
-        currentTask.setName(task.getName());
-        currentTask.setEffort(task.getEffort());
+        if (task.getEffort() != null) {
+            currentTask.setEffort(task.getEffort());
+        }
         return taskRepository.save(currentTask);
     }
 
