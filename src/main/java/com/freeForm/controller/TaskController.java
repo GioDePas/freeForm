@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -38,6 +39,8 @@ public class TaskController {
         Attachment attachment = new Attachment();
         attachment.setName(file.getOriginalFilename());
         attachment.setData(file.getBytes());
+        attachment.setContentType(file.getContentType());
+        task.setAttachment(attachment);
         return taskService.createTask(task);
     }
 
@@ -53,15 +56,10 @@ public class TaskController {
         taskService.deleteTask(id);
     }
 
-    @PostMapping("/tasks/{taskId}/attachment")
-    public ResponseEntity<Attachment> createAttachmentByTaskId(@PathVariable Long taskId, @RequestBody Attachment attachment) {
-        Task task = taskService.getTaskById(taskId);
-        if (task == null) {
-            return ResponseEntity.notFound().build();
-        }
-        task.setAttachment(attachment);
-        attachmentService.createAttachment(attachment);
-        return ResponseEntity.ok(attachment);
+    /*@PostMapping("/{taskId}/attachment")
+    public ResponseEntity<String> addAttachmentToTask(@RequestPart("file") MultipartFile file, @PathVariable Long taskId) throws IOException {
+        Attachment attachment = taskService.addAttachmentToTask(file, taskId);
+        return ResponseEntity.ok("Attachment with id " + attachment.getId() + " added to task with id " + taskId);
     }
-
+    */
 }

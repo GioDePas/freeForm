@@ -1,5 +1,7 @@
 package com.freeForm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -25,9 +27,11 @@ public class Task {
     @Max(value = 10, message = "Effort must be less than 10")
     private Integer effort;
     @OneToOne(
-            mappedBy = "task",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(
+            name = "attachment_id",
+            referencedColumnName = "id"
     )
     private Attachment attachment;
 }

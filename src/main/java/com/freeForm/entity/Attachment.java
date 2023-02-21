@@ -1,7 +1,7 @@
 package com.freeForm.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,8 +16,8 @@ public class Attachment {
     private Long id;
     private byte[] data;
     private String name;
-    @OneToOne
-    @JoinColumn(name = "task_id")
-    @NotNull
+    private String contentType;
+    @OneToOne(mappedBy = "attachment")
+    @JsonBackReference
     private Task task;
 }
