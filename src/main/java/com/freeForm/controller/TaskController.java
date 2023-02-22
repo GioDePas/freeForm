@@ -56,10 +56,4 @@ public class TaskController {
         taskService.deleteTask(id);
     }
 
-    /*@PostMapping("/{taskId}/attachment")
-    public ResponseEntity<String> addAttachmentToTask(@RequestPart("file") MultipartFile file, @PathVariable Long taskId) throws IOException {
-        Attachment attachment = taskService.addAttachmentToTask(file, taskId);
-        return ResponseEntity.ok("Attachment with id " + attachment.getId() + " added to task with id " + taskId);
-    }
-    */
 }
