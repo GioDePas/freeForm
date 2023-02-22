@@ -3,7 +3,7 @@ package com.freeForm.service;
 import com.freeForm.config.JwtService;
 import com.freeForm.dto.request.AuthenticationRequest;
 import com.freeForm.dto.request.RegisterRequest;
-import com.freeForm.dto.response.AuthenticationResponse;
+import com.freeForm.dto.AuthenticationDto;
 import com.freeForm.entity.CustomUserDetails;
 import com.freeForm.entity.User;
 import com.freeForm.enums.Role;
@@ -25,7 +25,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest registerRequest) {
+    public AuthenticationDto register(RegisterRequest registerRequest) {
         if (registerRequest == null || (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword()))) {
             throw new RuntimeException("Password and Confirm Password must be same");
         }
@@ -40,7 +40,7 @@ public class AuthService {
         try {
             userRepository.save(user);
             var jwtToken = jwtService.generateToken(new CustomUserDetails(user));
-            return AuthenticationResponse.builder()
+            return AuthenticationDto.builder()
                     .authenticationToken(jwtToken)
                     .build();
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class AuthService {
         }
     }
 
-    public AuthenticationResponse login(AuthenticationRequest request) {
+    public AuthenticationDto login(AuthenticationRequest request) {
         authenticationManager
                 .authenticate(
                         new UsernamePasswordAuthenticationToken(
@@ -59,7 +59,7 @@ public class AuthService {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         var jwtToken = jwtService.generateToken(new CustomUserDetails(user));
-        return AuthenticationResponse.builder()
+        return AuthenticationDto.builder()
                 .authenticationToken(jwtToken)
                 .build();
     }

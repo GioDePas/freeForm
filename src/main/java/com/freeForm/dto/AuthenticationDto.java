@@ -1,4 +1,4 @@
-package com.freeForm.dto.response;
+package com.freeForm.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+public class AuthenticationDto {
     private String authenticationToken;
 }
