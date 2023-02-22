@@ -1,6 +1,8 @@
 package com.freeForm.controller;
 
+import com.freeForm.dto.UserDto;
 import com.freeForm.entity.User;
+import com.freeForm.mapper.UserMapper;
 import com.freeForm.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -16,20 +18,23 @@ public class UserController {
 
     @GetMapping
     @SecurityRequirement(name = "bearerAuth")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<UserDto> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        return UserMapper.mapUsersToDtos(users);
     }
 
     @GetMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
-    public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public UserDto getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        return UserMapper.mapUserToDto(user);
     }
 
     @PutMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user);
+    public UserDto updateUser(@PathVariable Long id, @RequestBody User user) {
+        User updatedUser = userService.updateUser(id, user);
+        return UserMapper.mapUserToDto(updatedUser);
     }
 
     @DeleteMapping("/{id}")

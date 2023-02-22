@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
@@ -28,14 +27,11 @@ public class SecurityConfig {
         httpSecurity
                 .csrf()
                 .disable()
-
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**", "/swagger-resources/**")
                 .permitAll()
                 .requestMatchers("/api/admin/**")
                 .hasRole("ADMIN")
-                //.anyRequest()
-                //.authenticated()
                 .and()
                 .authorizeHttpRequests()
                 .anyRequest()

@@ -1,26 +1,18 @@
-package com.freeForm.entity;
+package com.freeForm.dto;
 
 import com.freeForm.enums.Role;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserDto {
     private Long id;
     private String firstname;
     private String lastname;
-    @Column(unique = true)
     private String email;
     private String password;
-    @Enumerated(EnumType.STRING)
     private Role role;
 }

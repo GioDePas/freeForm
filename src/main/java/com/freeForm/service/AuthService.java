@@ -37,15 +37,14 @@ public class AuthService {
                 .role(Role.USER)
                 .password(encodedPassword)
                 .build();
-        try {
-            userRepository.save(user);
-            var jwtToken = jwtService.generateToken(new CustomUserDetails(user));
-            return AuthenticationDto.builder()
-                    .authenticationToken(jwtToken)
-                    .build();
-        } catch (Exception e) {
+        if (userRepository.findByEmail(user.getEmail()).isEmpty())
             throw new UserNameTakenException("Username is already taken");
-        }
+        userRepository.save(user);
+        var jwtToken = jwtService.generateToken(new CustomUserDetails(user));
+        return AuthenticationDto.builder()
+                .authenticationToken(jwtToken)
+                .build();
+
     }
 
     public AuthenticationDto login(AuthenticationRequest request) {

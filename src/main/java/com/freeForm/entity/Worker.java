@@ -17,17 +17,10 @@ public class Worker {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
-    @Size(min = 2, max = 30)
     private String firstname;
-    @NotNull
-    @Size(min = 2, max = 30)
     private String lastname;
-    @NotNull
     private String email;
-    @NotNull
     private Integer age;
-    @NotNull
     @ManyToMany(
             cascade = CascadeType.ALL
     )

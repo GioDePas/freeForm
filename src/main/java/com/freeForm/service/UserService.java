@@ -1,5 +1,6 @@
 package com.freeForm.service;
 
+import com.freeForm.dto.UserDto;
 import com.freeForm.entity.User;
 import com.freeForm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
