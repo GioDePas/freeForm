@@ -4,8 +4,10 @@ import com.freeForm.dto.WorkerDto;
 import com.freeForm.entity.Attachment;
 import com.freeForm.entity.Task;
 import com.freeForm.entity.Worker;
+import com.freeForm.exceptions.InvalidEmailException;
 import com.freeForm.mapper.WorkerMapper;
 import com.freeForm.repository.WorkerRepository;
+import com.freeForm.utils.ValidationUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,21 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class WorkerService {
     private final WorkerRepository workerRepository;
 
+    @Transactional(readOnly = true)
     public List<WorkerDto> getAllWorkers() {
         List<Worker> workers = workerRepository.findAll();
         return WorkerMapper.mapWorkersToDtos(workers);
     }
 
+    @Transactional(readOnly = true)
     public WorkerDto getWorkerById(Long id) {
         Worker worker = workerRepository.findById(id).orElseThrow(() -> new RuntimeException("Worker with id " + id + " not found"));
         return WorkerMapper.mapWorkerToDto(worker);
     }
 
+    @Transactional
     public WorkerDto createWorker(@Valid WorkerDto workerDto, List<MultipartFile> files) throws IOException {
         List<Attachment> attachments = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -41,12 +45,18 @@ public class WorkerService {
             attachment.setContentType(file.getContentType());
             attachments.add(attachment);
         }
+
+        if (!ValidationUtils.isValidEmail(workerDto.getEmail())) {
+            throw new InvalidEmailException("Email is not valid");
+        }
+
         Worker worker = WorkerMapper.mapDtoToWorker(workerDto);
         worker.getTasks().forEach(task -> task.setAttachment(attachments.get(worker.getTasks().indexOf(task))));
         Worker createdWorker = workerRepository.save(worker);
         return WorkerMapper.mapWorkerToDto(createdWorker);
     }
 
+    @Transactional
     public WorkerDto updateWorker(Long id, WorkerDto workerDto, List<MultipartFile> files) throws IOException {
         Worker currentWorker = workerRepository
                 .findById(id)
@@ -88,6 +98,7 @@ public class WorkerService {
         return WorkerMapper.mapWorkerToDto(updatedWorker);
     }
 
+    @Transactional
     public void deleteWorker(Long id) {
         workerRepository.deleteById(id);
     }

@@ -7,15 +7,12 @@ import com.freeForm.dto.request.RegisterRequest;
 import com.freeForm.entity.CustomUserDetails;
 import com.freeForm.entity.User;
 import com.freeForm.enums.Role;
-import com.freeForm.exceptions.InvalidCredentialsException;
-import com.freeForm.exceptions.PasswordMismatchException;
-import com.freeForm.exceptions.UserNameTakenException;
-import com.freeForm.exceptions.UserNotFoundException;
+import com.freeForm.exceptions.*;
 import com.freeForm.repository.UserRepository;
+import com.freeForm.utils.ValidationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +43,10 @@ public class AuthService {
 
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new UserNameTakenException("Username is already taken");
+        }
+
+        if (!ValidationUtils.isValidEmail(user.getEmail())) {
+            throw new InvalidEmailException("Invalid email");
         }
 
         userRepository.save(user);

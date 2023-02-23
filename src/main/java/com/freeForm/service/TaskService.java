@@ -14,21 +14,23 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class TaskService {
     private final TaskRepository taskRepository;
 
+    @Transactional(readOnly = true)
     public List<TaskDto> getAllTasks() {
         List<Task> tasks = taskRepository.findAll();
         return TaskMapper.mapTasksToDtos(tasks);
     }
 
+    @Transactional(readOnly = true)
     public TaskDto getTaskById(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task with id " + id + " not found"));
         return TaskMapper.mapTaskToDto(task);
     }
 
+    @Transactional
     public TaskDto createTask(@Valid TaskDto taskDto, MultipartFile file) throws Exception {
         Attachment attachment = new Attachment();
         attachment.setName(file.getOriginalFilename());
@@ -39,6 +41,7 @@ public class TaskService {
         return TaskMapper.mapTaskToDto(taskCreated);
     }
 
+    @Transactional
     public TaskDto updateTask(Long id, TaskDto taskDto, MultipartFile file) throws Exception {
         Task currentTask = taskRepository
                 .findById(id)
@@ -61,6 +64,7 @@ public class TaskService {
         return TaskMapper.mapTaskToDto(updatedTask);
     }
 
+    @Transactional
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
     }

@@ -15,18 +15,17 @@ import java.util.List;
 @AllArgsConstructor
 public class WorkerDto {
     private Long id;
-    @NotNull
+    @NotNull(message = "First name is required")
     @Size(min = 2, max = 20)
     private String firstname;
-    @NotNull
+    @NotNull(message = "Last name is required")
     @Size(min = 2, max = 20)
     private String lastname;
-    @NotNull
-    @Email
+    @NotNull(message = "Email is required")
     private String email;
-    @NotNull
+    @NotNull(message = "Age is required")
     private Integer age;
-    @NotNull
+
     private List<@Valid TaskDto> tasks;
 
 }
