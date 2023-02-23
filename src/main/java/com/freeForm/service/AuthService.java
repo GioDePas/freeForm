@@ -1,17 +1,21 @@
 package com.freeForm.service;
 
 import com.freeForm.config.JwtService;
+import com.freeForm.dto.AuthenticationDto;
 import com.freeForm.dto.request.AuthenticationRequest;
 import com.freeForm.dto.request.RegisterRequest;
-import com.freeForm.dto.AuthenticationDto;
 import com.freeForm.entity.CustomUserDetails;
 import com.freeForm.entity.User;
 import com.freeForm.enums.Role;
+import com.freeForm.exceptions.InvalidCredentialsException;
+import com.freeForm.exceptions.PasswordMismatchException;
 import com.freeForm.exceptions.UserNameTakenException;
+import com.freeForm.exceptions.UserNotFoundException;
 import com.freeForm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,9 +31,11 @@ public class AuthService {
 
     public AuthenticationDto register(RegisterRequest registerRequest) {
         if (registerRequest == null || (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword()))) {
-            throw new RuntimeException("Password and Confirm Password must be same");
+            throw new PasswordMismatchException("Password and Confirm Password must be same");
         }
+
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
+
         User user = User.builder()
                 .firstname(registerRequest.getFirstname())
                 .lastname(registerRequest.getLastname())
@@ -37,26 +43,36 @@ public class AuthService {
                 .role(Role.USER)
                 .password(encodedPassword)
                 .build();
-        if (userRepository.findByEmail(user.getEmail()).isEmpty())
+
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new UserNameTakenException("Username is already taken");
+        }
+
         userRepository.save(user);
+
         var jwtToken = jwtService.generateToken(new CustomUserDetails(user));
         return AuthenticationDto.builder()
                 .authenticationToken(jwtToken)
                 .build();
-
     }
 
     public AuthenticationDto login(AuthenticationRequest request) {
-        authenticationManager
-                .authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                request.getEmail(),
-                                request.getPassword()
-                        )
-                );
+
+        try {
+            authenticationManager
+                    .authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    request.getEmail(),
+                                    request.getPassword()
+                            )
+                    );
+        } catch (Exception e) {
+            throw new InvalidCredentialsException("Invalid username or password");
+        }
+
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
         var jwtToken = jwtService.generateToken(new CustomUserDetails(user));
         return AuthenticationDto.builder()
                 .authenticationToken(jwtToken)

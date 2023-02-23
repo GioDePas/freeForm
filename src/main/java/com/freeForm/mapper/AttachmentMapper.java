@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AttachmentMapper {
-    public static AttachmentDto mapAttachmentsToDto(Attachment attachment) {
+
+    public static AttachmentDto mapAttachmentToDto(Attachment attachment) {
             AttachmentDto attachmentDto = new AttachmentDto();
             attachmentDto.setId(attachment.getId());
             attachmentDto.setData(attachment.getData());
@@ -18,6 +19,16 @@ public class AttachmentMapper {
     }
 
     public static List<AttachmentDto> mapAttachmentsToDtos(List<Attachment> attachments) {
-        return attachments.stream().map(AttachmentMapper::mapAttachmentsToDto).collect(Collectors.toList());
+        return attachments.stream().map(AttachmentMapper::mapAttachmentToDto).collect(Collectors.toList());
     }
+
+    public static Attachment mapDtoToAttachment(AttachmentDto attachmentDto) {
+        Attachment attachment = new Attachment();
+        attachment.setId(attachmentDto.getId());
+        attachment.setData(attachmentDto.getData());
+        attachment.setName(attachmentDto.getName());
+        attachment.setContentType(attachmentDto.getContentType());
+        return attachment;
+    }
+
 }

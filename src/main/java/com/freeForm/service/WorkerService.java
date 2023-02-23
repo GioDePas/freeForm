@@ -6,6 +6,7 @@ import com.freeForm.entity.Task;
 import com.freeForm.entity.Worker;
 import com.freeForm.mapper.WorkerMapper;
 import com.freeForm.repository.WorkerRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,7 @@ public class WorkerService {
         return WorkerMapper.mapWorkerToDto(worker);
     }
 
-    public WorkerDto createWorker(Worker worker, List<MultipartFile> files) throws IOException {
+    public WorkerDto createWorker(@Valid WorkerDto workerDto, List<MultipartFile> files) throws IOException {
         List<Attachment> attachments = new ArrayList<>();
         for (MultipartFile file : files) {
             Attachment attachment = new Attachment();
@@ -40,28 +41,29 @@ public class WorkerService {
             attachment.setContentType(file.getContentType());
             attachments.add(attachment);
         }
-        worker.setTasks(worker.getTasks());
+        Worker worker = WorkerMapper.mapDtoToWorker(workerDto);
         worker.getTasks().forEach(task -> task.setAttachment(attachments.get(worker.getTasks().indexOf(task))));
         Worker createdWorker = workerRepository.save(worker);
         return WorkerMapper.mapWorkerToDto(createdWorker);
     }
 
-    public WorkerDto updateWorker(Long id, Worker worker, List<MultipartFile> files) throws IOException {
+    public WorkerDto updateWorker(Long id, WorkerDto workerDto, List<MultipartFile> files) throws IOException {
         Worker currentWorker = workerRepository
                 .findById(id)
                 .orElseThrow(()->new RuntimeException("Worker with id " + id + " not found"));
-        if (worker.getFirstname() != null) {
-            currentWorker.setFirstname(worker.getFirstname());
+        Worker workerToUpdate = WorkerMapper.mapDtoToWorker(workerDto);
+        if (workerToUpdate.getFirstname() != null) {
+            currentWorker.setFirstname(workerToUpdate.getFirstname());
         }
-        if (worker.getLastname() != null) {
-            currentWorker.setLastname(worker.getLastname());
+        if (workerToUpdate.getLastname() != null) {
+            currentWorker.setLastname(workerToUpdate.getLastname());
         }
-        if (worker.getAge() != null) {
-            currentWorker.setAge(worker.getAge());
+        if (workerToUpdate.getAge() != null) {
+            currentWorker.setAge(workerToUpdate.getAge());
         }
-        if (worker.getTasks() != null) {
+        if (workerToUpdate.getTasks() != null) {
             for (Task i : currentWorker.getTasks()) {
-                for (Task j : worker.getTasks()) {
+                for (Task j : workerToUpdate.getTasks()) {
                     if (i.getId().equals(j.getId())) {
                         if (j.getName() != null) {
                             i.setName(j.getName());

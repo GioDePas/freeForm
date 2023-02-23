@@ -5,6 +5,7 @@ import com.freeForm.entity.Attachment;
 import com.freeForm.entity.Task;
 import com.freeForm.mapper.TaskMapper;
 import com.freeForm.repository.TaskRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,29 +25,30 @@ public class TaskService {
     }
 
     public TaskDto getTaskById(Long id) {
-        Task task = taskRepository.findById(id).orElse(null);
+        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task with id " + id + " not found"));
         return TaskMapper.mapTaskToDto(task);
     }
 
-    public TaskDto createTask(Task task, MultipartFile file) throws Exception {
+    public TaskDto createTask(@Valid TaskDto taskDto, MultipartFile file) throws Exception {
         Attachment attachment = new Attachment();
         attachment.setName(file.getOriginalFilename());
         attachment.setData(file.getBytes());
         attachment.setContentType(file.getContentType());
-        task.setAttachment(attachment);
+        Task task = TaskMapper.mapDtoToTask(taskDto);
         Task taskCreated = taskRepository.save(task);
-        return TaskMapper.mapTaskToDto(task);
+        return TaskMapper.mapTaskToDto(taskCreated);
     }
 
-    public TaskDto updateTask(Long id, Task task, MultipartFile file) throws Exception {
+    public TaskDto updateTask(Long id, TaskDto taskDto, MultipartFile file) throws Exception {
         Task currentTask = taskRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Task with id " + id + " not found"));
-        if (task.getName() != null) {
-            currentTask.setName(task.getName());
+        Task taskToUpdate = TaskMapper.mapDtoToTask(taskDto);
+        if (taskToUpdate.getName() != null) {
+            currentTask.setName(taskToUpdate.getName());
         }
-        if (task.getEffort() != null) {
-            currentTask.setEffort(task.getEffort());
+        if (taskToUpdate.getEffort() != null) {
+            currentTask.setEffort(taskToUpdate.getEffort());
         }
         if (file != null) {
             Attachment attachment = currentTask.getAttachment();
@@ -62,5 +64,4 @@ public class TaskService {
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
     }
-
 }

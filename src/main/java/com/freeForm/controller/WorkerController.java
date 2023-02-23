@@ -1,9 +1,9 @@
 package com.freeForm.controller;
 
 import com.freeForm.dto.WorkerDto;
-import com.freeForm.entity.Worker;
 import com.freeForm.service.WorkerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,20 +32,21 @@ public class WorkerController {
     @PostMapping
     @SecurityRequirement(name = "bearerAuth")
     public WorkerDto createWorker(
-            @RequestPart Worker worker,
+            @Valid
+            @RequestPart WorkerDto workerDto,
             @RequestPart List<MultipartFile> files
     ) throws IOException {
-        return workerService.createWorker(worker, files);
+        return workerService.createWorker(workerDto, files);
     }
 
     @PutMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     public WorkerDto updateWorker(
             @PathVariable Long id,
-            @RequestPart Worker worker,
+            @RequestPart WorkerDto workerDto,
             @RequestPart List<MultipartFile> files
     ) throws IOException {
-        return workerService.updateWorker(id, worker, files);
+        return workerService.updateWorker(id, workerDto, files);
     }
 
     @DeleteMapping("/{id}")

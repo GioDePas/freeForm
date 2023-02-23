@@ -1,9 +1,6 @@
 package com.freeForm.controller;
 
 import com.freeForm.dto.TaskDto;
-import com.freeForm.entity.Attachment;
-import com.freeForm.entity.Task;
-import com.freeForm.mapper.TaskMapper;
 import com.freeForm.service.TaskService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
@@ -35,20 +32,20 @@ public class TaskController {
     @SecurityRequirement(name = "bearerAuth")
     public TaskDto createTask(
             @Valid
-            @RequestPart Task task,
+            @RequestPart TaskDto taskDto,
             @RequestPart MultipartFile file
     ) throws Exception {
-        return taskService.createTask(task, file);
+        return taskService.createTask(taskDto, file);
     }
 
     @PutMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     public TaskDto updateTask(
             @PathVariable Long id,
-            @RequestPart Task task,
+            @RequestPart TaskDto taskDto,
             @RequestPart MultipartFile file
     ) throws Exception {
-        return taskService.updateTask(id, task, file);
+        return taskService.updateTask(id, taskDto, file);
     }
 
     @DeleteMapping("/{id}")

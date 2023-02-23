@@ -2,7 +2,6 @@ package com.freeForm.controller;
 
 import com.freeForm.dto.UserDto;
 import com.freeForm.entity.User;
-import com.freeForm.mapper.UserMapper;
 import com.freeForm.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
