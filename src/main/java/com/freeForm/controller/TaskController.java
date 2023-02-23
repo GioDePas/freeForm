@@ -22,15 +22,13 @@ public class TaskController {
     @GetMapping
     @SecurityRequirement(name = "bearerAuth")
     public List<TaskDto> getAllTasks() {
-        List<Task> tasks = taskService.getAllTasks();
-        return TaskMapper.mapTasksToDtos(tasks);
+        return taskService.getAllTasks();
     }
 
     @GetMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     public TaskDto getTaskById(@PathVariable Long id) {
-        Task task = taskService.getTaskById(id);
-        return TaskMapper.mapTasksToDto(task);
+        return taskService.getTaskById(id);
     }
 
     @PostMapping
@@ -40,13 +38,7 @@ public class TaskController {
             @RequestPart Task task,
             @RequestPart MultipartFile file
     ) throws Exception {
-        Attachment attachment = new Attachment();
-        attachment.setName(file.getOriginalFilename());
-        attachment.setData(file.getBytes());
-        attachment.setContentType(file.getContentType());
-        task.setAttachment(attachment);
-        Task createdTask = taskService.createTask(task);
-        return TaskMapper.mapTasksToDto(createdTask);
+        return taskService.createTask(task, file);
     }
 
     @PutMapping("/{id}")
@@ -56,8 +48,7 @@ public class TaskController {
             @RequestPart Task task,
             @RequestPart MultipartFile file
     ) throws Exception {
-        Task updatedTask = taskService.updateTask(id, task, file);
-        return TaskMapper.mapTasksToDto(updatedTask);
+        return taskService.updateTask(id, task, file);
     }
 
     @DeleteMapping("/{id}")
@@ -65,5 +56,4 @@ public class TaskController {
     public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
     }
-
 }

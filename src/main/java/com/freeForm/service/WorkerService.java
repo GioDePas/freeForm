@@ -1,8 +1,10 @@
 package com.freeForm.service;
 
+import com.freeForm.dto.WorkerDto;
 import com.freeForm.entity.Attachment;
 import com.freeForm.entity.Task;
 import com.freeForm.entity.Worker;
+import com.freeForm.mapper.WorkerMapper;
 import com.freeForm.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,19 +21,32 @@ import java.util.List;
 public class WorkerService {
     private final WorkerRepository workerRepository;
 
-    public List<Worker> getAllWorkers() {
-        return workerRepository.findAll();
+    public List<WorkerDto> getAllWorkers() {
+        List<Worker> workers = workerRepository.findAll();
+        return WorkerMapper.mapWorkersToDtos(workers);
     }
 
-    public Worker getWorkerById(Long id) {
-        return workerRepository.findById(id).orElse(null);
+    public WorkerDto getWorkerById(Long id) {
+        Worker worker = workerRepository.findById(id).orElseThrow(() -> new RuntimeException("Worker with id " + id + " not found"));
+        return WorkerMapper.mapWorkerToDto(worker);
     }
 
-    public Worker createWorker(Worker worker) {
-        return workerRepository.save(worker);
+    public WorkerDto createWorker(Worker worker, List<MultipartFile> files) throws IOException {
+        List<Attachment> attachments = new ArrayList<>();
+        for (MultipartFile file : files) {
+            Attachment attachment = new Attachment();
+            attachment.setName(file.getOriginalFilename());
+            attachment.setData(file.getBytes());
+            attachment.setContentType(file.getContentType());
+            attachments.add(attachment);
+        }
+        worker.setTasks(worker.getTasks());
+        worker.getTasks().forEach(task -> task.setAttachment(attachments.get(worker.getTasks().indexOf(task))));
+        Worker createdWorker = workerRepository.save(worker);
+        return WorkerMapper.mapWorkerToDto(createdWorker);
     }
 
-    public Worker updateWorker(Long id, Worker worker, List<MultipartFile> files) throws IOException {
+    public WorkerDto updateWorker(Long id, Worker worker, List<MultipartFile> files) throws IOException {
         Worker currentWorker = workerRepository
                 .findById(id)
                 .orElseThrow(()->new RuntimeException("Worker with id " + id + " not found"));
@@ -66,7 +82,8 @@ public class WorkerService {
                 }
             }
         }
-        return workerRepository.save(currentWorker);
+        Worker updatedWorker = workerRepository.save(currentWorker);
+        return WorkerMapper.mapWorkerToDto(updatedWorker);
     }
 
     public void deleteWorker(Long id) {

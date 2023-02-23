@@ -19,22 +19,19 @@ public class UserController {
     @GetMapping
     @SecurityRequirement(name = "bearerAuth")
     public List<UserDto> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return UserMapper.mapUsersToDtos(users);
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     public UserDto getUserById(@PathVariable Long id) {
-        User user = userService.getUserById(id);
-        return UserMapper.mapUserToDto(user);
+        return userService.getUserById(id);
     }
 
     @PutMapping("/{id}")
     @SecurityRequirement(name = "bearerAuth")
     public UserDto updateUser(@PathVariable Long id, @RequestBody User user) {
-        User updatedUser = userService.updateUser(id, user);
-        return UserMapper.mapUserToDto(updatedUser);
+        return userService.updateUser(id, user);
     }
 
     @DeleteMapping("/{id}")

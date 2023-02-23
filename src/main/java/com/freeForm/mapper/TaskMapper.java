@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class TaskMapper {
-    public static TaskDto mapTasksToDto(Task task) {
+
+    public static TaskDto mapTaskToDto(Task task) {
         TaskDto taskDto = new TaskDto();
         taskDto.setId(task.getId());
         taskDto.setName(task.getName());
@@ -17,6 +18,7 @@ public class TaskMapper {
     }
 
     public static List<TaskDto> mapTasksToDtos(List<Task> tasks) {
-        return tasks.stream().map(TaskMapper::mapTasksToDto).collect(Collectors.toList());
+        return tasks.stream().map(TaskMapper::mapTaskToDto).collect(Collectors.toList());
     }
+
 }
