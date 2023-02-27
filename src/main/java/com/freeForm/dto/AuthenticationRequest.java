@@ -1,4 +1,4 @@
-package com.freeForm.dto.request;
+package com.freeForm.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

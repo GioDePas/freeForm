@@ -19,7 +19,7 @@ public class UserMapper {
         return userDto;
     }
 
-    public static List<UserDto> mapUsersToDtos(List<User> users) {
+    public static List<UserDto> mapUsersToDto(List<User> users) {
         return users.stream().map(UserMapper::mapUserToDto).collect(Collectors.toList());
     }
 
@@ -34,7 +34,7 @@ public class UserMapper {
         return user;
     }
 
-    public static List<User> mapDtosToUsers(List<UserDto> userDtos) {
+    public static List<User> mapDtoToUsers(List<UserDto> userDtos) {
         return userDtos.stream().map(UserMapper::mapDtoToUser).collect(Collectors.toList());
     }
 }

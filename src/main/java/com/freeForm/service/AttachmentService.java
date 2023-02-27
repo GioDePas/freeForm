@@ -18,6 +18,6 @@ public class AttachmentService {
     @Transactional(readOnly = true)
     public List<AttachmentDto> getAllAttachments() {
         List<Attachment> attachments = attachmentRepository.findAll();
-        return AttachmentMapper.mapAttachmentsToDtos(attachments);
+        return AttachmentMapper.mapAttachmentsToDto(attachments);
     }
 }

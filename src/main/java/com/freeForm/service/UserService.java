@@ -19,7 +19,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return UserMapper.mapUsersToDtos(users);
+        return UserMapper.mapUsersToDto(users);
     }
 
     @Transactional(readOnly = true)

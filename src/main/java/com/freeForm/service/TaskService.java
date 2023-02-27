@@ -5,7 +5,6 @@ import com.freeForm.entity.Attachment;
 import com.freeForm.entity.Task;
 import com.freeForm.mapper.TaskMapper;
 import com.freeForm.repository.TaskRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,13 +30,17 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskDto createTask(@Valid TaskDto taskDto, MultipartFile file) throws Exception {
+    public TaskDto createTask(TaskDto taskDto, MultipartFile file) throws Exception {
+
         Attachment attachment = new Attachment();
         attachment.setName(file.getOriginalFilename());
         attachment.setData(file.getBytes());
         attachment.setContentType(file.getContentType());
+
         Task task = TaskMapper.mapDtoToTask(taskDto);
+        task.setAttachment(attachment);
         Task taskCreated = taskRepository.save(task);
+
         return TaskMapper.mapTaskToDto(taskCreated);
     }
 

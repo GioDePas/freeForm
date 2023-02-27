@@ -1,9 +1,7 @@
 package com.freeForm.dto;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,8 +22,8 @@ public class WorkerDto {
     @NotNull(message = "Email is required")
     private String email;
     @NotNull(message = "Age is required")
+    @Min(value = 18, message = "Age must be greater than 18")
+    @Max(value = 80, message = "Age must be less than 80")
     private Integer age;
-
     private List<@Valid TaskDto> tasks;
-
 }

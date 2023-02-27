@@ -9,11 +9,14 @@ import java.util.stream.Collectors;
 public class TaskMapper {
 
     public static TaskDto mapTaskToDto(Task task) {
+
         TaskDto taskDto = new TaskDto();
+
         taskDto.setId(task.getId());
         taskDto.setName(task.getName());
         taskDto.setEffort(task.getEffort());
-        taskDto.setAttachment(AttachmentMapper.mapAttachmentToDto(task.getAttachment()));
+
+        //taskDto.setAttachment(AttachmentMapper.mapAttachmentToDto(task.getAttachment()));
         return taskDto;
     }
 
@@ -26,11 +29,11 @@ public class TaskMapper {
         task.setId(taskDto.getId());
         task.setName(taskDto.getName());
         task.setEffort(taskDto.getEffort());
-        task.setAttachment(AttachmentMapper.mapDtoToAttachment(taskDto.getAttachment()));
+        //task.setAttachment(AttachmentMapper.mapDtoToAttachment(taskDto.getAttachment()));
         return task;
     }
 
-    public static List<Task> mapDtosToTasks(List<TaskDto> taskDtos) {
+    public static List<Task> mapDtoToTasks(List<TaskDto> taskDtos) {
         return taskDtos.stream().map(TaskMapper::mapDtoToTask).collect(Collectors.toList());
     }
 

@@ -1,14 +1,15 @@
 package com.freeForm.service;
 
+import com.freeForm.dto.TaskDto;
 import com.freeForm.dto.WorkerDto;
 import com.freeForm.entity.Attachment;
 import com.freeForm.entity.Task;
 import com.freeForm.entity.Worker;
 import com.freeForm.exceptions.InvalidEmailException;
 import com.freeForm.mapper.WorkerMapper;
+import com.freeForm.repository.TaskRepository;
 import com.freeForm.repository.WorkerRepository;
 import com.freeForm.utils.ValidationUtils;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkerService {
     private final WorkerRepository workerRepository;
+    private final TaskRepository taskRepository;
 
     @Transactional(readOnly = true)
     public List<WorkerDto> getAllWorkers() {
         List<Worker> workers = workerRepository.findAll();
-        return WorkerMapper.mapWorkersToDtos(workers);
+        return WorkerMapper.mapWorkersToDto(workers);
     }
 
     @Transactional(readOnly = true)
@@ -36,7 +38,12 @@ public class WorkerService {
     }
 
     @Transactional
-    public WorkerDto createWorker(@Valid WorkerDto workerDto, List<MultipartFile> files) throws IOException {
+    public WorkerDto createWorker(WorkerDto workerDto, List<MultipartFile> files) throws IOException {
+
+        if (files.isEmpty()) {
+            throw new IllegalArgumentException("No attachment files provided.");
+        }
+
         List<Attachment> attachments = new ArrayList<>();
         for (MultipartFile file : files) {
             Attachment attachment = new Attachment();
@@ -51,8 +58,18 @@ public class WorkerService {
         }
 
         Worker worker = WorkerMapper.mapDtoToWorker(workerDto);
-        worker.getTasks().forEach(task -> task.setAttachment(attachments.get(worker.getTasks().indexOf(task))));
+
         Worker createdWorker = workerRepository.save(worker);
+
+        List<Task> tasks = createdWorker.getTasks();
+        if (tasks != null) {
+            for (int i = 0; i < tasks.size(); i++) {
+                Task task = tasks.get(i);
+                task.setAttachment(attachments.get(i));
+                taskRepository.save(task);
+            }
+        }
+
         return WorkerMapper.mapWorkerToDto(createdWorker);
     }
 

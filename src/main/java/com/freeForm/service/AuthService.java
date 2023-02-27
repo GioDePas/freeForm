@@ -2,8 +2,8 @@ package com.freeForm.service;
 
 import com.freeForm.config.JwtService;
 import com.freeForm.dto.AuthenticationDto;
-import com.freeForm.dto.request.AuthenticationRequest;
-import com.freeForm.dto.request.RegisterRequest;
+import com.freeForm.dto.UserDto;
+import com.freeForm.dto.AuthenticationRequest;
 import com.freeForm.entity.CustomUserDetails;
 import com.freeForm.entity.User;
 import com.freeForm.enums.Role;
@@ -26,27 +26,27 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationDto register(RegisterRequest registerRequest) {
-        if (registerRequest == null || (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword()))) {
-            throw new PasswordMismatchException("Password and Confirm Password must be same");
+    public AuthenticationDto register(UserDto userDto) {
+        if (userDto == null || (!userDto.getPassword().equals(userDto.getConfirmPassword()))) {
+            throw new PasswordMismatchException("Password and Confirm Password must be the same");
         }
 
-        String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
+        String encodedPassword = passwordEncoder.encode(userDto.getPassword());
 
         User user = User.builder()
-                .firstname(registerRequest.getFirstname())
-                .lastname(registerRequest.getLastname())
-                .email(registerRequest.getEmail())
+                .firstname(userDto.getFirstname())
+                .lastname(userDto.getLastname())
+                .email(userDto.getEmail())
                 .role(Role.USER)
                 .password(encodedPassword)
                 .build();
 
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new UserNameTakenException("Username is already taken");
+            throw new UserNameTakenException("Username: " + user.getEmail() + " is already taken");
         }
 
         if (!ValidationUtils.isValidEmail(user.getEmail())) {
-            throw new InvalidEmailException("Invalid email");
+            throw new InvalidEmailException("Invalid email: " + user.getEmail());
         }
 
         userRepository.save(user);

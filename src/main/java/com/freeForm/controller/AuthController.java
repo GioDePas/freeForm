@@ -1,7 +1,7 @@
 package com.freeForm.controller;
 
-import com.freeForm.dto.request.AuthenticationRequest;
-import com.freeForm.dto.request.RegisterRequest;
+import com.freeForm.dto.UserDto;
+import com.freeForm.dto.AuthenticationRequest;
 import com.freeForm.dto.AuthenticationDto;
 import com.freeForm.service.AuthService;
 import jakarta.validation.Valid;
@@ -16,8 +16,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationDto> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        return ResponseEntity.ok(authService.register(registerRequest));
+    public ResponseEntity<AuthenticationDto> register(@Valid @RequestBody UserDto userDto) {
+        return ResponseEntity.ok(authService.register(userDto));
     }
 
     @PostMapping("/login")

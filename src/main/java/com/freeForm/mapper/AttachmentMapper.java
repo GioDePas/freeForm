@@ -18,7 +18,7 @@ public class AttachmentMapper {
             return attachmentDto;
     }
 
-    public static List<AttachmentDto> mapAttachmentsToDtos(List<Attachment> attachments) {
+    public static List<AttachmentDto> mapAttachmentsToDto(List<Attachment> attachments) {
         return attachments.stream().map(AttachmentMapper::mapAttachmentToDto).collect(Collectors.toList());
     }
 
