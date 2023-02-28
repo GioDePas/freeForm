@@ -6,7 +6,10 @@ import com.freeForm.dto.UserDto;
 import com.freeForm.dto.AuthenticationRequest;
 import com.freeForm.entity.CustomUserDetails;
 import com.freeForm.entity.User;
+import com.freeForm.enums.ErrorCodes;
 import com.freeForm.enums.Role;
+import com.freeForm.errors.ErrorResponse;
+import com.freeForm.errors.ErrorResponseList;
 import com.freeForm.exceptions.*;
 import com.freeForm.repository.UserRepository;
 import com.freeForm.utils.ValidationUtils;
@@ -16,6 +19,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -28,7 +33,15 @@ public class AuthService {
 
     public AuthenticationDto register(UserDto userDto) {
         if (userDto == null || (!userDto.getPassword().equals(userDto.getConfirmPassword()))) {
-            throw new PasswordMismatchException("Password and Confirm Password must be the same");
+            throw new PasswordMismatchException(
+                    ErrorResponseList
+                            .builder()
+                            .errors(List.of(ErrorResponse
+                                    .builder()
+                                    .message(ErrorCodes.PASSWORD_MISMATCH.getMessage())
+                                    .code(ErrorCodes.PASSWORD_MISMATCH.getCode())
+                                    .build()))
+                            .build());
         }
 
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
@@ -42,11 +55,27 @@ public class AuthService {
                 .build();
 
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new UserNameTakenException("Username: " + user.getEmail() + " is already taken");
+            throw new UserNameTakenException(
+                    ErrorResponseList
+                            .builder()
+                            .errors(List.of(ErrorResponse
+                                    .builder()
+                                    .message(ErrorCodes.USERNAME_TAKEN.getMessage())
+                                    .code(ErrorCodes.USERNAME_TAKEN.getCode())
+                                    .build()))
+                            .build());
         }
 
         if (!ValidationUtils.isValidEmail(user.getEmail())) {
-            throw new InvalidEmailException("Invalid email: " + user.getEmail());
+            throw new InvalidEmailException(
+                    ErrorResponseList
+                            .builder()
+                            .errors(List.of(ErrorResponse
+                                    .builder()
+                                    .message(ErrorCodes.INVALID_EMAIL.getMessage())
+                                    .code(ErrorCodes.INVALID_EMAIL.getCode())
+                                    .build()))
+                            .build());
         }
 
         userRepository.save(user);
@@ -68,11 +97,27 @@ public class AuthService {
                             )
                     );
         } catch (Exception e) {
-            throw new InvalidCredentialsException("Invalid username or password");
+            throw new InvalidCredentialsException(
+                    ErrorResponseList
+                            .builder()
+                            .errors(List.of(ErrorResponse
+                                    .builder()
+                                    .message(ErrorCodes.INVALID_CREDENTIALS.getMessage())
+                                    .code(ErrorCodes.INVALID_CREDENTIALS.getCode())
+                                    .build()))
+                            .build());
         }
 
         var user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorResponseList
+                                .builder()
+                                .errors(List.of(ErrorResponse
+                                        .builder()
+                                        .message(ErrorCodes.RESOURCE_NOT_FOUND.getCode())
+                                        .code(ErrorCodes.RESOURCE_NOT_FOUND.getCode())
+                                        .build()))
+                                .build()));
 
         var jwtToken = jwtService.generateToken(new CustomUserDetails(user));
         return AuthenticationDto.builder()

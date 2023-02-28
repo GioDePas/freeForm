@@ -2,6 +2,10 @@ package com.freeForm.service;
 
 import com.freeForm.dto.UserDto;
 import com.freeForm.entity.User;
+import com.freeForm.enums.ErrorCodes;
+import com.freeForm.errors.ErrorResponse;
+import com.freeForm.errors.ErrorResponseList;
+import com.freeForm.exceptions.ResourceNotFoundException;
 import com.freeForm.mapper.UserMapper;
 import com.freeForm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +28,15 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(()->new RuntimeException("User with id " + id + " not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+                ErrorResponseList
+                        .builder()
+                        .errors(List.of(ErrorResponse
+                                .builder()
+                                .message(ErrorCodes.RESOURCE_NOT_FOUND.getMessage())
+                                .code(ErrorCodes.RESOURCE_NOT_FOUND.getCode())
+                                .build()))
+                        .build()));
         return UserMapper.mapUserToDto(user);
     }
 
@@ -37,7 +49,15 @@ public class UserService {
     public UserDto updateUser(Long id, User user) {
         User currentUser = userRepository
                 .findById(id)
-                .orElseThrow(()->new RuntimeException("User with id " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorResponseList
+                                .builder()
+                                .errors(List.of(ErrorResponse
+                                        .builder()
+                                        .message(ErrorCodes.RESOURCE_NOT_FOUND.getMessage())
+                                        .code(ErrorCodes.RESOURCE_NOT_FOUND.getCode())
+                                        .build()))
+                                .build()));
         if (user.getFirstname() != null) {
             currentUser.setFirstname(user.getFirstname());
         }

@@ -1,9 +1,13 @@
 package com.freeForm.exceptions;
 
+import com.freeForm.errors.ErrorResponseList;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import java.io.Serial;
+
+@AllArgsConstructor
+@Getter
 public class InvalidEmailException extends RuntimeException  {
-
-        public InvalidEmailException(String message) {
-            super(message);
-        }
-
+    private ErrorResponseList errorResponseList;
 }

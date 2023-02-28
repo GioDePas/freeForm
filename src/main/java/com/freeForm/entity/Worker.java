@@ -24,11 +24,11 @@ public class Worker {
     )
     @JoinTable(
             joinColumns = @JoinColumn(
-                    name = "task_id",
+                    name = "worker_id",
                     referencedColumnName = "id"
             ),
             inverseJoinColumns = @JoinColumn(
-                    name = "worker_id",
+                    name = "task_id",
                     referencedColumnName = "id"
             )
     )

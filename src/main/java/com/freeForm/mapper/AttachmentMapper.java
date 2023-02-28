@@ -22,13 +22,4 @@ public class AttachmentMapper {
         return attachments.stream().map(AttachmentMapper::mapAttachmentToDto).collect(Collectors.toList());
     }
 
-    public static Attachment mapDtoToAttachment(AttachmentDto attachmentDto) {
-        Attachment attachment = new Attachment();
-        attachment.setId(attachmentDto.getId());
-        attachment.setData(attachmentDto.getData());
-        attachment.setName(attachmentDto.getName());
-        attachment.setContentType(attachmentDto.getContentType());
-        return attachment;
-    }
-
 }

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class UserDto {
     private Long id;
     @NotNull(message = "First name is required")
-    //@Size(min = 2, max = 20)
+    @Size(min = 2, max = 20)
     private String firstname;
     @NotNull(message = "Last name is required")
     @Size(min = 2, max = 20)

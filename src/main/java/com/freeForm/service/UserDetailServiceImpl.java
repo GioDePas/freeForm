@@ -2,6 +2,7 @@ package com.freeForm.service;
 
 import com.freeForm.entity.User;
 import com.freeForm.entity.CustomUserDetails;
+import com.freeForm.enums.ErrorCodes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,7 +20,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userService.getUserByUsername(email);
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found" + email);
+            throw new UsernameNotFoundException(ErrorCodes.USERNAME_NOT_FOUND.getMessage()
+                    + " " + ErrorCodes.RESOURCE_NOT_FOUND.getCode());
         }
         return new CustomUserDetails(user.get());
     }

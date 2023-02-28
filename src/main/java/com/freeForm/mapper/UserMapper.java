@@ -23,18 +23,4 @@ public class UserMapper {
         return users.stream().map(UserMapper::mapUserToDto).collect(Collectors.toList());
     }
 
-    public static User mapDtoToUser(UserDto userDto) {
-        User user = new User();
-        user.setId(userDto.getId());
-        user.setFirstname(userDto.getFirstname());
-        user.setLastname(userDto.getLastname());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setRole(userDto.getRole());
-        return user;
-    }
-
-    public static List<User> mapDtoToUsers(List<UserDto> userDtos) {
-        return userDtos.stream().map(UserMapper::mapDtoToUser).collect(Collectors.toList());
-    }
 }

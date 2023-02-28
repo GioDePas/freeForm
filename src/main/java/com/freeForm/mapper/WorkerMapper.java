@@ -7,30 +7,19 @@ import com.freeForm.entity.Worker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TransferQueue;
 import java.util.stream.Collectors;
 
 public class WorkerMapper {
 
     public static WorkerDto mapWorkerToDto(Worker worker) {
-
         WorkerDto workerDto = new WorkerDto();
-
         workerDto.setId(worker.getId());
         workerDto.setFirstname(worker.getFirstname());
         workerDto.setLastname(worker.getLastname());
         workerDto.setEmail(worker.getEmail());
         workerDto.setAge(worker.getAge());
 
-        List<TaskDto> taskDtos = new ArrayList<>();
-        for(Task task : worker.getTasks()) {
-            TaskDto taskDto = new TaskDto();
-            taskDto.setId(task.getId());
-            taskDto.setName(task.getName());
-            taskDto.setEffort(task.getEffort());
-            taskDtos.add(taskDto);
-        }
-        workerDto.setTasks(taskDtos);
+        workerDto.setTasks(TaskMapper.mapTasksToDto(worker.getTasks()));
         return workerDto;
     }
 
@@ -45,14 +34,7 @@ public class WorkerMapper {
         worker.setEmail(workerDto.getEmail());
         worker.setAge(workerDto.getAge());
 
-        List<Task> tasks = new ArrayList<>();
-        for(TaskDto taskDto : workerDto.getTasks()) {
-            Task task =  new Task();
-            task.setName(taskDto.getName());
-            task.setEffort(taskDto.getEffort());
-            tasks.add(task);
-        }
-        worker.setTasks(tasks);
+        worker.setTasks(TaskMapper.mapDtoToTasks(workerDto.getTasks()));
         return worker;
     }
 

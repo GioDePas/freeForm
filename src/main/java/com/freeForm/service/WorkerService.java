@@ -1,11 +1,14 @@
 package com.freeForm.service;
 
-import com.freeForm.dto.TaskDto;
 import com.freeForm.dto.WorkerDto;
 import com.freeForm.entity.Attachment;
 import com.freeForm.entity.Task;
 import com.freeForm.entity.Worker;
+import com.freeForm.enums.ErrorCodes;
+import com.freeForm.errors.ErrorResponse;
+import com.freeForm.errors.ErrorResponseList;
 import com.freeForm.exceptions.InvalidEmailException;
+import com.freeForm.exceptions.ResourceNotFoundException;
 import com.freeForm.mapper.WorkerMapper;
 import com.freeForm.repository.TaskRepository;
 import com.freeForm.repository.WorkerRepository;
@@ -33,7 +36,15 @@ public class WorkerService {
 
     @Transactional(readOnly = true)
     public WorkerDto getWorkerById(Long id) {
-        Worker worker = workerRepository.findById(id).orElseThrow(() -> new RuntimeException("Worker with id " + id + " not found"));
+        Worker worker = workerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+                ErrorResponseList
+                        .builder()
+                        .errors(List.of(ErrorResponse
+                                .builder()
+                                .message(ErrorCodes.RESOURCE_NOT_FOUND.getMessage())
+                                .code(ErrorCodes.RESOURCE_NOT_FOUND.getCode())
+                                .build()))
+                        .build()));
         return WorkerMapper.mapWorkerToDto(worker);
     }
 
@@ -41,7 +52,9 @@ public class WorkerService {
     public WorkerDto createWorker(WorkerDto workerDto, List<MultipartFile> files) throws IOException {
 
         if (files.isEmpty()) {
-            throw new IllegalArgumentException("No attachment files provided.");
+            throw new IllegalArgumentException(
+                    ErrorCodes.ILLEGAL_ARGUMENT.getMessage()
+                            + " " + ErrorCodes.ILLEGAL_ARGUMENT.getCode());
         }
 
         List<Attachment> attachments = new ArrayList<>();
@@ -54,11 +67,18 @@ public class WorkerService {
         }
 
         if (!ValidationUtils.isValidEmail(workerDto.getEmail())) {
-            throw new InvalidEmailException("Email is not valid");
+            throw new InvalidEmailException(
+                    ErrorResponseList
+                            .builder()
+                            .errors(List.of(ErrorResponse
+                                    .builder()
+                                    .message(ErrorCodes.INVALID_EMAIL.getMessage())
+                                    .code(ErrorCodes.INVALID_EMAIL.getCode())
+                                    .build()))
+                            .build());
         }
 
         Worker worker = WorkerMapper.mapDtoToWorker(workerDto);
-
         Worker createdWorker = workerRepository.save(worker);
 
         List<Task> tasks = createdWorker.getTasks();
@@ -69,7 +89,6 @@ public class WorkerService {
                 taskRepository.save(task);
             }
         }
-
         return WorkerMapper.mapWorkerToDto(createdWorker);
     }
 
@@ -77,7 +96,16 @@ public class WorkerService {
     public WorkerDto updateWorker(Long id, WorkerDto workerDto, List<MultipartFile> files) throws IOException {
         Worker currentWorker = workerRepository
                 .findById(id)
-                .orElseThrow(()->new RuntimeException("Worker with id " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorResponseList
+                                .builder()
+                                .errors(List.of(ErrorResponse
+                                        .builder()
+                                        .message(ErrorCodes.RESOURCE_NOT_FOUND.getMessage())
+                                        .code(ErrorCodes.RESOURCE_NOT_FOUND.getCode())
+                                        .build()))
+                                .build()));
+
         Worker workerToUpdate = WorkerMapper.mapDtoToWorker(workerDto);
         if (workerToUpdate.getFirstname() != null) {
             currentWorker.setFirstname(workerToUpdate.getFirstname());

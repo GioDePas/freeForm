@@ -3,6 +3,10 @@ package com.freeForm.service;
 import com.freeForm.dto.TaskDto;
 import com.freeForm.entity.Attachment;
 import com.freeForm.entity.Task;
+import com.freeForm.enums.ErrorCodes;
+import com.freeForm.errors.ErrorResponse;
+import com.freeForm.errors.ErrorResponseList;
+import com.freeForm.exceptions.ResourceNotFoundException;
 import com.freeForm.mapper.TaskMapper;
 import com.freeForm.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +24,20 @@ public class TaskService {
     @Transactional(readOnly = true)
     public List<TaskDto> getAllTasks() {
         List<Task> tasks = taskRepository.findAll();
-        return TaskMapper.mapTasksToDtos(tasks);
+        return TaskMapper.mapTasksToDto(tasks);
     }
 
     @Transactional(readOnly = true)
     public TaskDto getTaskById(Long id) {
-        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task with id " + id + " not found"));
+        Task task = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
+                ErrorResponseList
+                        .builder()
+                        .errors(List.of(ErrorResponse
+                                .builder()
+                                .message(ErrorCodes.RESOURCE_NOT_FOUND.getMessage())
+                                .code(ErrorCodes.RESOURCE_NOT_FOUND.getCode())
+                                .build()))
+                        .build()));
         return TaskMapper.mapTaskToDto(task);
     }
 
@@ -48,7 +60,15 @@ public class TaskService {
     public TaskDto updateTask(Long id, TaskDto taskDto, MultipartFile file) throws Exception {
         Task currentTask = taskRepository
                 .findById(id)
-                .orElseThrow(() -> new RuntimeException("Task with id " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        ErrorResponseList
+                                .builder()
+                                .errors(List.of(ErrorResponse
+                                        .builder()
+                                        .message(ErrorCodes.RESOURCE_NOT_FOUND.getMessage())
+                                        .code(ErrorCodes.RESOURCE_NOT_FOUND.getCode())
+                                        .build()))
+                                .build()));
         Task taskToUpdate = TaskMapper.mapDtoToTask(taskDto);
         if (taskToUpdate.getName() != null) {
             currentTask.setName(taskToUpdate.getName());

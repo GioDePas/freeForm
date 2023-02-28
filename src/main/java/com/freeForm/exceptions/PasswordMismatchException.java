@@ -1,9 +1,11 @@
 package com.freeForm.exceptions;
 
+import com.freeForm.errors.ErrorResponseList;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public class PasswordMismatchException extends RuntimeException {
-
-    public PasswordMismatchException(String message) {
-        super(message);
-    }
-
+    private ErrorResponseList errorResponseList;
 }
