@@ -11,8 +11,8 @@ public enum ErrorCodes {
     RESOURCE_NOT_FOUND("ERR004", "Resource not found"),
     USERNAME_TAKEN("ERR005", "Username already taken"),
     ILLEGAL_ARGUMENT("ERR006", "Illegal argument"),
-    USERNAME_NOT_FOUND("ERR007", "Username not found");
-
+    USERNAME_NOT_FOUND("ERR007", "Username not found"),
+    INVALID_PASSWORD("ERR008", "Invalid password");
     private final String code;
     private final String message;
 }

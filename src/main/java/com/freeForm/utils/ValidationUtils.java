@@ -13,4 +13,10 @@ public class ValidationUtils {
         return pattern.matcher(email).matches();
     }
 
+    public static boolean isValidPassword(String password) {
+        String passwordRegex = "^(?=.*[A-Z])(?=.*[_@#$%^&+=-])(?=.*[0-9])(?=\\S+$).{8,}$";
+        Pattern pattern = Pattern.compile(passwordRegex);
+        return pattern.matcher(password).matches();
+    }
+
 }

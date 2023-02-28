@@ -25,7 +25,7 @@ public class FreeFormApplication {
                         .firstname("Giorgio")
                         .lastname("De Pascale")
                         .email("giorgio.depascale@outlook.com")
-                        .password(passwordEncoder.encode("password"))
+                        .password(passwordEncoder.encode("Password-00"))
                         .role(Role.ADMIN)
                         .build()
                 );

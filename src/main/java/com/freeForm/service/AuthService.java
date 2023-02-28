@@ -32,6 +32,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationDto register(UserDto userDto) {
+
         if (userDto == null || (!userDto.getPassword().equals(userDto.getConfirmPassword()))) {
             throw new PasswordMismatchException(
                     ErrorResponseList
@@ -40,6 +41,18 @@ public class AuthService {
                                     .builder()
                                     .message(ErrorCodes.PASSWORD_MISMATCH.getMessage())
                                     .code(ErrorCodes.PASSWORD_MISMATCH.getCode())
+                                    .build()))
+                            .build());
+        }
+
+        if (!ValidationUtils.isValidPassword(userDto.getPassword())) {
+            throw new InvalidPasswordException(
+                    ErrorResponseList
+                            .builder()
+                            .errors(List.of(ErrorResponse
+                                    .builder()
+                                    .message(ErrorCodes.INVALID_PASSWORD.getMessage())
+                                    .code(ErrorCodes.INVALID_PASSWORD.getCode())
                                     .build()))
                             .build());
         }
@@ -54,6 +67,18 @@ public class AuthService {
                 .password(encodedPassword)
                 .build();
 
+        if (!ValidationUtils.isValidEmail(user.getEmail())) {
+            throw new InvalidEmailException(
+                    ErrorResponseList
+                            .builder()
+                            .errors(List.of(ErrorResponse
+                                    .builder()
+                                    .message(ErrorCodes.INVALID_EMAIL.getMessage())
+                                    .code(ErrorCodes.INVALID_EMAIL.getCode())
+                                    .build()))
+                            .build());
+        }
+
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new UserNameTakenException(
                     ErrorResponseList
@@ -66,17 +91,6 @@ public class AuthService {
                             .build());
         }
 
-        if (!ValidationUtils.isValidEmail(user.getEmail())) {
-            throw new InvalidEmailException(
-                    ErrorResponseList
-                            .builder()
-                            .errors(List.of(ErrorResponse
-                                    .builder()
-                                    .message(ErrorCodes.INVALID_EMAIL.getMessage())
-                                    .code(ErrorCodes.INVALID_EMAIL.getCode())
-                                    .build()))
-                            .build());
-        }
 
         userRepository.save(user);
 
@@ -114,8 +128,8 @@ public class AuthService {
                                 .builder()
                                 .errors(List.of(ErrorResponse
                                         .builder()
-                                        .message(ErrorCodes.RESOURCE_NOT_FOUND.getCode())
-                                        .code(ErrorCodes.RESOURCE_NOT_FOUND.getCode())
+                                        .message(ErrorCodes.USERNAME_NOT_FOUND.getCode())
+                                        .code(ErrorCodes.USERNAME_NOT_FOUND.getCode())
                                         .build()))
                                 .build()));
 

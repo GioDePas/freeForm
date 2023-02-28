@@ -20,7 +20,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<User> user = userService.getUserByUsername(email);
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException(ErrorCodes.USERNAME_NOT_FOUND.getMessage()
+            throw new UsernameNotFoundException(ErrorCodes.RESOURCE_NOT_FOUND.getMessage()
                     + " " + ErrorCodes.RESOURCE_NOT_FOUND.getCode());
         }
         return new CustomUserDetails(user.get());

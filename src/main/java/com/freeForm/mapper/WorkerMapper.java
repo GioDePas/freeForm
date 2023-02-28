@@ -1,11 +1,8 @@
 package com.freeForm.mapper;
 
-import com.freeForm.dto.TaskDto;
 import com.freeForm.dto.WorkerDto;
-import com.freeForm.entity.Task;
 import com.freeForm.entity.Worker;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class UserNameTakenException extends RuntimeException {
-    private ErrorResponseList errorResponseList;
+public class InvalidPasswordException extends RuntimeException{
+    ErrorResponseList errorResponseList;
 }

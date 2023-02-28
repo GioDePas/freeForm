@@ -28,8 +28,8 @@ public class TaskMapper {
         return task;
     }
 
-    public static List<Task> mapDtoToTasks(List<TaskDto> taskDtos) {
-        return taskDtos.stream().map(TaskMapper::mapDtoToTask).collect(Collectors.toList());
+    public static List<Task> mapDtoToTasks(List<TaskDto> taskDto) {
+        return taskDto.stream().map(TaskMapper::mapDtoToTask).collect(Collectors.toList());
     }
 
 }
