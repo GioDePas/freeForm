@@ -7,12 +7,10 @@ import com.freeForm.entity.Worker;
 import com.freeForm.enums.ErrorCodes;
 import com.freeForm.errors.ErrorResponse;
 import com.freeForm.errors.ErrorResponseList;
-import com.freeForm.exceptions.InvalidEmailException;
 import com.freeForm.exceptions.ResourceNotFoundException;
 import com.freeForm.mapper.WorkerMapper;
 import com.freeForm.repository.TaskRepository;
 import com.freeForm.repository.WorkerRepository;
-import com.freeForm.utils.ValidationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,13 +47,7 @@ public class WorkerService {
     }
 
     @Transactional
-    public WorkerDto createWorker(WorkerDto workerDto, List<MultipartFile> files) throws IOException {
-
-        if (files.isEmpty()) {
-            throw new IllegalArgumentException(
-                    ErrorCodes.ILLEGAL_ARGUMENT.getMessage()
-                            + " " + ErrorCodes.ILLEGAL_ARGUMENT.getCode());
-        }
+    public WorkerDto createWorker(WorkerDto workerDto, List<MultipartFile> files) throws IOException{
 
         List<Attachment> attachments = new ArrayList<>();
         for (MultipartFile file : files) {
@@ -64,18 +56,6 @@ public class WorkerService {
             attachment.setData(file.getBytes());
             attachment.setContentType(file.getContentType());
             attachments.add(attachment);
-        }
-
-        if (!ValidationUtils.isValidEmail(workerDto.getEmail())) {
-            throw new InvalidEmailException(
-                    ErrorResponseList
-                            .builder()
-                            .errors(List.of(ErrorResponse
-                                    .builder()
-                                    .message(ErrorCodes.INVALID_EMAIL.getMessage())
-                                    .code(ErrorCodes.INVALID_EMAIL.getCode())
-                                    .build()))
-                            .build());
         }
 
         Worker worker = WorkerMapper.mapDtoToWorker(workerDto);

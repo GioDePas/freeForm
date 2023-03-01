@@ -12,7 +12,6 @@ import com.freeForm.errors.ErrorResponse;
 import com.freeForm.errors.ErrorResponseList;
 import com.freeForm.exceptions.*;
 import com.freeForm.repository.UserRepository;
-import com.freeForm.utils.ValidationUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,30 +32,6 @@ public class AuthService {
 
     public AuthenticationDto register(UserDto userDto) {
 
-        if (userDto == null || (!userDto.getPassword().equals(userDto.getConfirmPassword()))) {
-            throw new PasswordMismatchException(
-                    ErrorResponseList
-                            .builder()
-                            .errors(List.of(ErrorResponse
-                                    .builder()
-                                    .message(ErrorCodes.PASSWORD_MISMATCH.getMessage())
-                                    .code(ErrorCodes.PASSWORD_MISMATCH.getCode())
-                                    .build()))
-                            .build());
-        }
-
-        if (!ValidationUtils.isValidPassword(userDto.getPassword())) {
-            throw new InvalidPasswordException(
-                    ErrorResponseList
-                            .builder()
-                            .errors(List.of(ErrorResponse
-                                    .builder()
-                                    .message(ErrorCodes.INVALID_PASSWORD.getMessage())
-                                    .code(ErrorCodes.INVALID_PASSWORD.getCode())
-                                    .build()))
-                            .build());
-        }
-
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
 
         User user = User.builder()
@@ -67,19 +42,7 @@ public class AuthService {
                 .password(encodedPassword)
                 .build();
 
-        if (!ValidationUtils.isValidEmail(user.getEmail())) {
-            throw new InvalidEmailException(
-                    ErrorResponseList
-                            .builder()
-                            .errors(List.of(ErrorResponse
-                                    .builder()
-                                    .message(ErrorCodes.INVALID_EMAIL.getMessage())
-                                    .code(ErrorCodes.INVALID_EMAIL.getCode())
-                                    .build()))
-                            .build());
-        }
-
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
             throw new UserNameTakenException(
                     ErrorResponseList
                             .builder()
@@ -90,7 +53,6 @@ public class AuthService {
                                     .build()))
                             .build());
         }
-
 
         userRepository.save(user);
 
@@ -138,4 +100,5 @@ public class AuthService {
                 .authenticationToken(jwtToken)
                 .build();
     }
+
 }

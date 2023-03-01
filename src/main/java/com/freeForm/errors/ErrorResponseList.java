@@ -12,8 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ErrorResponseList {
-
     private List<ErrorResponse> errors;
     private String path;
-
 }

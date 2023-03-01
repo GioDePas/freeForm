@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,19 @@ public class AdviceController {
                         .params(fieldError.getField())
                         .build()
                 ).collect(Collectors.toList());
+        errorsList.addAll(
+                ex
+                        .getBindingResult()
+                        .getGlobalErrors()
+                        .stream()
+                        .map(classError -> ErrorResponse
+                                .builder()
+                                .code(classError.getCode())
+                                .message(classError.getDefaultMessage())
+                                .params(classError.getObjectName())
+                                .build()
+                        ).toList()
+        );
         return ResponseEntity.badRequest().body(ErrorResponseList
                 .builder()
                 .errors(errorsList)
@@ -43,8 +57,16 @@ public class AdviceController {
     //MULTIPART
     @ExceptionHandler(MissingServletRequestPartException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> handleMissingPartException(MissingServletRequestPartException ex) {
-        return ResponseEntity.badRequest().body("Required part '" + ex.getRequestPartName() + "' is not present.");
+    public ResponseEntity<ErrorResponseList> handleMissingPartException(MissingServletRequestPartException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .code("MP009")
+                .message("Required part '" + ex.getRequestPartName() + "' is not present.")
+                .params(ex.getRequestPartName())
+                .build();
+        ErrorResponseList errorResponseList = ErrorResponseList.builder()
+                .errors(Collections.singletonList(errorResponse))
+                .build();
+        return ResponseEntity.badRequest().body(errorResponseList);
     }
 
     //RESOURCE NOT FOUND
@@ -53,29 +75,6 @@ public class AdviceController {
     public ResponseEntity<ErrorResponseList> handleMissingPartException(ResourceNotFoundException ex, HttpServletRequest request) {
         ex.getErrorResponseList().setPath(request.getContextPath() + request.getRequestURI());
         return ResponseEntity.badRequest().body(ex.getErrorResponseList());
-    }
-
-    //INVALID EMAIL
-    @ExceptionHandler(InvalidEmailException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponseList> handleMissingPartException(InvalidEmailException ex, HttpServletRequest request) {
-        ex.getErrorResponseList().setPath(request.getContextPath() + request.getRequestURI());
-        return ResponseEntity.badRequest().body(ex.getErrorResponseList());
-    }
-
-    //ILLEGAL ARGUMENT
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponseList> handleMissingPartException(IllegalArgumentException ex, HttpServletRequest request) {
-        ErrorResponseList errorResponseList = ErrorResponseList
-                .builder()
-                .errors(List.of(ErrorResponse
-                        .builder()
-                        .message(ex.getMessage())
-                        .build()))
-                .build();
-        errorResponseList.setPath(request.getContextPath() + request.getRequestURI());
-        return ResponseEntity.badRequest().body(errorResponseList);
     }
 
     //USER NOT FOUND
@@ -93,26 +92,10 @@ public class AdviceController {
         return ResponseEntity.badRequest().body(errorResponseList);
     }
 
-    //PASSWORD MISMATCH
-    @ExceptionHandler(PasswordMismatchException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponseList> handleMissingPartException(PasswordMismatchException ex, HttpServletRequest request) {
-        ex.getErrorResponseList().setPath(request.getContextPath() + request.getRequestURI());
-        return ResponseEntity.badRequest().body(ex.getErrorResponseList());
-    }
-
     //USERNAME TAKEN
     @ExceptionHandler(UserNameTakenException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponseList> handleMissingPartException(UserNameTakenException ex, HttpServletRequest request) {
-        ex.getErrorResponseList().setPath(request.getContextPath() + request.getRequestURI());
-        return ResponseEntity.badRequest().body(ex.getErrorResponseList());
-    }
-
-    //INVALID PASSWORD
-    @ExceptionHandler(InvalidPasswordException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponseList> handleMissingPartException(InvalidPasswordException ex, HttpServletRequest request) {
         ex.getErrorResponseList().setPath(request.getContextPath() + request.getRequestURI());
         return ResponseEntity.badRequest().body(ex.getErrorResponseList());
     }

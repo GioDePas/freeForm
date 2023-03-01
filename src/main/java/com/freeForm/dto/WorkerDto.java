@@ -1,5 +1,6 @@
 package com.freeForm.dto;
 
+import com.freeForm.annotations.IE002;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ public class WorkerDto {
     @Size(min = 2, max = 20)
     private String lastname;
     @NotNull(message = "Email is required")
+    @IE002
     private String email;
     @NotNull(message = "Age is required")
     @Min(value = 18, message = "Age must be greater than 18")

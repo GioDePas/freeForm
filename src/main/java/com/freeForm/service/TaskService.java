@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -42,7 +43,7 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskDto createTask(TaskDto taskDto, MultipartFile file) throws Exception {
+    public TaskDto createTask(TaskDto taskDto, MultipartFile file) throws IOException {
 
         Attachment attachment = new Attachment();
         attachment.setName(file.getOriginalFilename());
@@ -57,7 +58,7 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskDto updateTask(Long id, TaskDto taskDto, MultipartFile file) throws Exception {
+    public TaskDto updateTask(Long id, TaskDto taskDto, MultipartFile file) throws IOException {
         Task currentTask = taskRepository
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
