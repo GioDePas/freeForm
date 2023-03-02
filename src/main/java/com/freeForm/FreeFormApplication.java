@@ -12,9 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @SpringBootApplication
 public class FreeFormApplication {
 
-
     /*http://localhost:8080/swagger-ui.html*/
-
 
     public static void main(String[] args) {
         SpringApplication.run(FreeFormApplication.class, args);

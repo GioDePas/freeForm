@@ -43,22 +43,22 @@ public class AuthService {
                 .build();
 
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
-            throw new UserNameTakenException(
-                    ErrorResponseList
-                            .builder()
-                            .errors(List.of(ErrorResponse
-                                    .builder()
-                                    .message(ErrorCodes.USERNAME_TAKEN.getMessage())
-                                    .code(ErrorCodes.USERNAME_TAKEN.getCode())
-                                    .build()))
-                            .build());
+            throw new UserNameTakenException(ErrorResponseList.builder()
+                    .errors(List.of(ErrorResponse.builder()
+                            .message(ErrorCodes.USERNAME_TAKEN.getMessage())
+                            .code(ErrorCodes.USERNAME_TAKEN.getCode())
+                            .build()))
+                    .build());
         }
 
         userRepository.save(user);
 
         var jwtToken = jwtService.generateToken(new CustomUserDetails(user));
+        var refreshToken = jwtService.generateRefreshToken(new CustomUserDetails(user));
+
         return AuthenticationDto.builder()
                 .authenticationToken(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -96,8 +96,10 @@ public class AuthService {
                                 .build()));
 
         var jwtToken = jwtService.generateToken(new CustomUserDetails(user));
+        var refreshToken = jwtService.generateRefreshToken(new CustomUserDetails(user));
         return AuthenticationDto.builder()
                 .authenticationToken(jwtToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 

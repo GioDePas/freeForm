@@ -1,7 +1,7 @@
 package com.freeForm.validators;
 
 import com.freeForm.annotations.IE002;
-import com.freeForm.constants.Patterns;
+import com.freeForm.constants.Values;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -15,7 +15,8 @@ public class EmailValidator implements ConstraintValidator<IE002, String> {
     }
 
     public boolean isValidEmail(String email) {
-        Pattern pattern = Pattern.compile(Patterns.EMAIL_PATTERN);
+        Pattern pattern = Pattern.compile(Values.EMAIL_PATTERN);
         return pattern.matcher(email).matches();
     }
+
 }

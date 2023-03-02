@@ -1,7 +1,7 @@
 package com.freeForm.validators;
 
 import com.freeForm.annotations.IP008;
-import com.freeForm.constants.Patterns;
+import com.freeForm.constants.Values;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -15,7 +15,7 @@ public class PasswordValidator implements ConstraintValidator<IP008, String> {
     }
 
     private boolean isValidPassword(String password) {
-        Pattern pattern = Pattern.compile(Patterns.PASSWORD_PATTERN);
+        Pattern pattern = Pattern.compile(Values.PASSWORD_PATTERN);
         return pattern.matcher(password).matches();
     }
 }
