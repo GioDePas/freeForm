@@ -15,9 +15,10 @@ import java.util.List;
 @RequestMapping("/api/attachments")
 public class AttachmentController {
     private final AttachmentService attachmentService;
+    private final static String BEARER = "bearerAuth";
 
     @GetMapping
-    @SecurityRequirement(name = "bearerAuth")
+    @SecurityRequirement(name = BEARER)
     public List<AttachmentDto> getAllAttachments() {
         return attachmentService.getAllAttachments();
     }

@@ -14,27 +14,29 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
+    private static final String ID_PATH = "/{id}";
+    private static final String BEARER = "bearerAuth";
 
     @GetMapping
-    @SecurityRequirement(name = "bearerAuth")
+    @SecurityRequirement(name = BEARER)
     public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping(ID_PATH)
+    @SecurityRequirement(name = BEARER)
     public UserDto getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
-    @PutMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
+    @PutMapping(ID_PATH)
+    @SecurityRequirement(name = BEARER)
     public UserDto updateUser(@PathVariable Long id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
 
-    @DeleteMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping(ID_PATH)
+    @SecurityRequirement(name = BEARER)
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
     }

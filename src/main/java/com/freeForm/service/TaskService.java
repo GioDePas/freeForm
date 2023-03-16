@@ -11,7 +11,6 @@ import com.freeForm.mapper.TaskMapper;
 import com.freeForm.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,13 +21,11 @@ import java.util.List;
 public class TaskService {
     private final TaskRepository taskRepository;
 
-    @Transactional(readOnly = true)
     public List<TaskDto> getAllTasks() {
         List<Task> tasks = taskRepository.findAll();
         return TaskMapper.mapTasksToDto(tasks);
     }
 
-    @Transactional(readOnly = true)
     public TaskDto getTaskById(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
                 ErrorResponseList
@@ -42,7 +39,6 @@ public class TaskService {
         return TaskMapper.mapTaskToDto(task);
     }
 
-    @Transactional
     public TaskDto createTask(TaskDto taskDto, MultipartFile file) throws IOException {
 
         Attachment attachment = new Attachment();
@@ -57,7 +53,6 @@ public class TaskService {
         return TaskMapper.mapTaskToDto(taskCreated);
     }
 
-    @Transactional
     public TaskDto updateTask(Long id, TaskDto taskDto, MultipartFile file) throws IOException {
         Task currentTask = taskRepository
                 .findById(id)
@@ -88,7 +83,6 @@ public class TaskService {
         return TaskMapper.mapTaskToDto(updatedTask);
     }
 
-    @Transactional
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
     }

@@ -15,21 +15,23 @@ import java.util.List;
 @RequestMapping("/api/tasks")
 public class TaskController {
     private final TaskService taskService;
+    private static final String ID_PATH = "/{id}";
+    private static final String BEARER = "bearerAuth";
 
     @GetMapping
-    @SecurityRequirement(name = "bearerAuth")
+    @SecurityRequirement(name = BEARER)
     public List<TaskDto> getAllTasks() {
         return taskService.getAllTasks();
     }
 
-    @GetMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping(ID_PATH)
+    @SecurityRequirement(name = BEARER)
     public TaskDto getTaskById(@PathVariable Long id) {
         return taskService.getTaskById(id);
     }
 
     @PostMapping
-    @SecurityRequirement(name = "bearerAuth")
+    @SecurityRequirement(name = BEARER)
     public TaskDto createTask(
             @Valid
             @RequestPart TaskDto taskDto,
@@ -38,8 +40,8 @@ public class TaskController {
         return taskService.createTask(taskDto, file);
     }
 
-    @PutMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
+    @PutMapping(ID_PATH)
+    @SecurityRequirement(name = BEARER)
     public TaskDto updateTask(
             @PathVariable Long id,
             @RequestPart TaskDto taskDto,
@@ -48,8 +50,8 @@ public class TaskController {
         return taskService.updateTask(id, taskDto, file);
     }
 
-    @DeleteMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping(ID_PATH)
+    @SecurityRequirement(name = BEARER)
     public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
     }

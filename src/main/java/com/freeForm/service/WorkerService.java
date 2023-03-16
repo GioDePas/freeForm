@@ -13,7 +13,6 @@ import com.freeForm.repository.TaskRepository;
 import com.freeForm.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -26,13 +25,11 @@ public class WorkerService {
     private final WorkerRepository workerRepository;
     private final TaskRepository taskRepository;
 
-    @Transactional(readOnly = true)
     public List<WorkerDto> getAllWorkers() {
         List<Worker> workers = workerRepository.findAll();
         return WorkerMapper.mapWorkersToDto(workers);
     }
 
-    @Transactional(readOnly = true)
     public WorkerDto getWorkerById(Long id) {
         Worker worker = workerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
                 ErrorResponseList
@@ -46,7 +43,6 @@ public class WorkerService {
         return WorkerMapper.mapWorkerToDto(worker);
     }
 
-    @Transactional
     public WorkerDto createWorker(WorkerDto workerDto, List<MultipartFile> files) throws IOException{
 
         List<Attachment> attachments = new ArrayList<>();
@@ -72,7 +68,6 @@ public class WorkerService {
         return WorkerMapper.mapWorkerToDto(createdWorker);
     }
 
-    @Transactional
     public WorkerDto updateWorker(Long id, WorkerDto workerDto, List<MultipartFile> files) throws IOException {
         Worker currentWorker = workerRepository
                 .findById(id)
@@ -123,7 +118,6 @@ public class WorkerService {
         return WorkerMapper.mapWorkerToDto(updatedWorker);
     }
 
-    @Transactional
     public void deleteWorker(Long id) {
         workerRepository.deleteById(id);
     }

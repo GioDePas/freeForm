@@ -10,7 +10,6 @@ import com.freeForm.mapper.UserMapper;
 import com.freeForm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,13 +19,11 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
         return UserMapper.mapUsersToDto(users);
     }
 
-    @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(
                 ErrorResponseList
@@ -40,12 +37,10 @@ public class UserService {
         return UserMapper.mapUserToDto(user);
     }
 
-    @Transactional(readOnly = true)
     public Optional<User> getUserByUsername(String email) {
         return userRepository.findByEmail(email);
     }
 
-    @Transactional
     public UserDto updateUser(Long id, User user) {
         User currentUser = userRepository
                 .findById(id)
@@ -74,7 +69,6 @@ public class UserService {
         return UserMapper.mapUserToDto(updatedUser);
     }
 
-    @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }

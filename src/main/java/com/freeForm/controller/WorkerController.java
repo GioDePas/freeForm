@@ -16,21 +16,23 @@ import java.util.List;
 @RequestMapping("/api/workers")
 public class WorkerController {
     private final WorkerService workerService;
+    private static final String ID_PATH = "/{id}";
+    private static final String BEARER = "bearerAuth";
 
     @GetMapping
-    @SecurityRequirement(name = "bearerAuth")
+    @SecurityRequirement(name = BEARER)
     public List<WorkerDto> getAllWorkers() {
         return workerService.getAllWorkers();
     }
 
-    @GetMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
+    @GetMapping(ID_PATH)
+    @SecurityRequirement(name = BEARER)
     public WorkerDto getWorkerById(@PathVariable Long id) {
         return workerService.getWorkerById(id);
     }
 
     @PostMapping
-    @SecurityRequirement(name = "bearerAuth")
+    @SecurityRequirement(name = BEARER)
     public WorkerDto createWorker(
             @Valid
             @RequestPart WorkerDto workerDto,
@@ -39,8 +41,8 @@ public class WorkerController {
         return workerService.createWorker(workerDto, files);
     }
 
-    @PutMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
+    @PutMapping(ID_PATH)
+    @SecurityRequirement(name = BEARER)
     public WorkerDto updateWorker(
             @PathVariable Long id,
             @RequestPart WorkerDto workerDto,
@@ -49,8 +51,8 @@ public class WorkerController {
         return workerService.updateWorker(id, workerDto, files);
     }
 
-    @DeleteMapping("/{id}")
-    @SecurityRequirement(name = "bearerAuth")
+    @DeleteMapping(ID_PATH)
+    @SecurityRequirement(name = BEARER)
     public void deleteWorker(@PathVariable Long id) {
         workerService.deleteWorker(id);
     }

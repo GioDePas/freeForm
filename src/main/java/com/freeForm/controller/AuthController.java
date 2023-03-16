@@ -14,13 +14,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthService authService;
+    private final static String REGISTER_PATH = "/register";
+    private final static String LOGIN_PATH = "/login";
 
-    @PostMapping("/register")
+    @PostMapping(REGISTER_PATH)
     public ResponseEntity<AuthenticationDto> register(@Valid @RequestBody UserDto userDto) {
         return ResponseEntity.ok(authService.register(userDto));
     }
 
-    @PostMapping("/login")
+    @PostMapping(LOGIN_PATH)
     public ResponseEntity<AuthenticationDto> login(@RequestBody AuthenticationRequest authenticationRequest) {
         return ResponseEntity.ok().body(authService.login(authenticationRequest));
     }
