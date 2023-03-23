@@ -1,4 +1,4 @@
-package com.freeForm.annotations;
+package com.freeForm.annotation;
 
 import com.freeForm.validators.PasswordMatchValidator;
 import jakarta.validation.Constraint;

@@ -1,4 +1,4 @@
-package com.freeForm.constants;
+package com.freeForm.constant;
 
 public class Values {
     public static final String SECRET_KEY = "655368566D5970337336763979244226452948404D635166546A576E5A723474";

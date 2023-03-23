@@ -1,7 +1,7 @@
 package com.freeForm.validators;
 
-import com.freeForm.annotations.IE002;
-import com.freeForm.constants.Values;
+import com.freeForm.annotation.IE002;
+import com.freeForm.constant.Values;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

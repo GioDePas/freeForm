@@ -1,8 +1,8 @@
 package com.freeForm.dto;
 
-import com.freeForm.annotations.IE002;
-import com.freeForm.annotations.IP008;
-import com.freeForm.annotations.PM003;
+import com.freeForm.annotation.IE002;
+import com.freeForm.annotation.IP008;
+import com.freeForm.annotation.PM003;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

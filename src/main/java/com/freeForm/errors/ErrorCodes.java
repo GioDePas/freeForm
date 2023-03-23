@@ -1,4 +1,4 @@
-package com.freeForm.enums;
+package com.freeForm.errors;
 
 import lombok.*;
 

@@ -1,6 +1,6 @@
 package com.freeForm.dto;
 
-import com.freeForm.annotations.IE002;
+import com.freeForm.annotation.IE002;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

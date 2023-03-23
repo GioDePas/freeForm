@@ -1,6 +1,6 @@
 package com.freeForm.validators;
 
-import com.freeForm.annotations.PM003;
+import com.freeForm.annotation.PM003;
 import com.freeForm.dto.UserDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

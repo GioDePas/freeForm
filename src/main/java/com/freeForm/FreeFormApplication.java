@@ -1,7 +1,7 @@
 package com.freeForm;
 
 import com.freeForm.entity.User;
-import com.freeForm.enums.Role;
+import com.freeForm.config.Role;
 import com.freeForm.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

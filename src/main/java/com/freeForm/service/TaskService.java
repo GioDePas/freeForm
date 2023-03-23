@@ -3,7 +3,7 @@ package com.freeForm.service;
 import com.freeForm.dto.TaskDto;
 import com.freeForm.entity.Attachment;
 import com.freeForm.entity.Task;
-import com.freeForm.enums.ErrorCodes;
+import com.freeForm.errors.ErrorCodes;
 import com.freeForm.errors.ErrorResponse;
 import com.freeForm.errors.ErrorResponseList;
 import com.freeForm.exceptions.ResourceNotFoundException;

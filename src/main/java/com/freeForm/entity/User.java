@@ -1,6 +1,6 @@
 package com.freeForm.entity;
 
-import com.freeForm.enums.Role;
+import com.freeForm.config.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

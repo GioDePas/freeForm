@@ -1,6 +1,6 @@
 package com.freeForm.config;
 
-import com.freeForm.constants.Values;
+import com.freeForm.constant.Values;
 import com.freeForm.entity.CustomUserDetails;
 import com.freeForm.entity.User;
 import com.freeForm.repository.UserRepository;

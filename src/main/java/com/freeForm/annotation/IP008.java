@@ -1,4 +1,4 @@
-package com.freeForm.annotations;
+package com.freeForm.annotation;
 
 import jakarta.validation.Constraint;
 
