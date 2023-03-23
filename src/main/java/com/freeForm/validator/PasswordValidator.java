@@ -1,4 +1,4 @@
-package com.freeForm.validators;
+package com.freeForm.validator;
 
 import com.freeForm.annotation.IP008;
 import com.freeForm.constant.Values;

@@ -1,8 +1,8 @@
 package com.freeForm.controller.advice;
 
-import com.freeForm.errors.ErrorResponse;
-import com.freeForm.errors.ErrorResponseList;
-import com.freeForm.exceptions.*;
+import com.freeForm.error.ErrorResponse;
+import com.freeForm.error.ErrorResponseList;
+import com.freeForm.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

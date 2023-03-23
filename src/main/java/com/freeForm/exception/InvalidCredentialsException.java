@@ -1,6 +1,6 @@
-package com.freeForm.exceptions;
+package com.freeForm.exception;
 
-import com.freeForm.errors.ErrorResponseList;
+import com.freeForm.error.ErrorResponseList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

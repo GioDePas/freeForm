@@ -1,4 +1,4 @@
-package com.freeForm.errors;
+package com.freeForm.error;
 
 import lombok.*;
 

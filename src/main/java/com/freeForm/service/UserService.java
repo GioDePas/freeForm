@@ -2,10 +2,10 @@ package com.freeForm.service;
 
 import com.freeForm.dto.UserDto;
 import com.freeForm.entity.User;
-import com.freeForm.errors.ErrorCodes;
-import com.freeForm.errors.ErrorResponse;
-import com.freeForm.errors.ErrorResponseList;
-import com.freeForm.exceptions.ResourceNotFoundException;
+import com.freeForm.error.ErrorCodes;
+import com.freeForm.error.ErrorResponse;
+import com.freeForm.error.ErrorResponseList;
+import com.freeForm.exception.ResourceNotFoundException;
 import com.freeForm.mapper.UserMapper;
 import com.freeForm.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

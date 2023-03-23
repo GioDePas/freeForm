@@ -2,7 +2,7 @@ package com.freeForm.service;
 
 import com.freeForm.entity.User;
 import com.freeForm.entity.CustomUserDetails;
-import com.freeForm.errors.ErrorCodes;
+import com.freeForm.error.ErrorCodes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

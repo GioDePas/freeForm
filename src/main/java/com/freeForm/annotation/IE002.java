@@ -12,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Target({FIELD})
 @Retention(RUNTIME)
-@Constraint(validatedBy = com.freeForm.validators.EmailValidator.class)
+@Constraint(validatedBy = com.freeForm.validator.EmailValidator.class)
 public @interface IE002 {
     String message() default "The email format is invalid";
     Class<?>[] groups() default {};

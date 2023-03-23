@@ -1,4 +1,4 @@
-package com.freeForm.validators;
+package com.freeForm.validator;
 
 import com.freeForm.annotation.PM003;
 import com.freeForm.dto.UserDto;
