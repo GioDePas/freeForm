@@ -1,6 +1,6 @@
 package com.freeForm.config;
 
-import com.freeForm.service.UserDetailServiceImpl;
+import com.freeForm.user.details.service.impl.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

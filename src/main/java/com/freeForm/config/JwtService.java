@@ -1,9 +1,9 @@
 package com.freeForm.config;
 
 import com.freeForm.constant.Values;
-import com.freeForm.entity.CustomUserDetails;
-import com.freeForm.entity.User;
-import com.freeForm.repository.UserRepository;
+import com.freeForm.user.dto.CustomUserDetails;
+import com.freeForm.user.dao.User;
+import com.freeForm.user.repo.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -27,6 +27,7 @@ import java.util.function.Function;
 @Service
 @RequiredArgsConstructor
 public class JwtService {
+
     private final UserRepository userRepository;
 
     public String extractUsername(String token) {
@@ -136,5 +137,6 @@ public class JwtService {
         } catch (Exception e) {
             return Optional.empty();
         }
+
     }
 }

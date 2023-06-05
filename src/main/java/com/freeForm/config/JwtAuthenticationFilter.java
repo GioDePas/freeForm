@@ -70,7 +70,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authenticationToken.ifPresent(token -> {
                     SecurityContextHolder.getContext().setAuthentication(token);
                     response.setHeader(AUTHORIZATION, "Bearer " + jWtService.generateToken(userDetails));
-
                 });
             }
         }

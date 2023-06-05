@@ -1,8 +1,8 @@
 package com.freeForm;
 
-import com.freeForm.entity.User;
+import com.freeForm.user.dao.User;
 import com.freeForm.config.Role;
-import com.freeForm.repository.UserRepository;
+import com.freeForm.user.repo.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
